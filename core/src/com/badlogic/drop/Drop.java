@@ -14,12 +14,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-
-import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class Drop extends ApplicationAdapter {
 	private Texture dropImage;
@@ -32,10 +30,14 @@ public class Drop extends ApplicationAdapter {
 	private Array<Rectangle> raindrops;
 	private long lastDropTime;
 
+	private World world;
+	private Box2DDebugRenderer debugRenderer;
+
 	@Override
 	public void create() {
 		// create world for BOX2D
-		World world = new World(new Vector2(0, 0), true);
+		world = new World(new Vector2(0, 0), true);
+		debugRenderer = new Box2DDebugRenderer();
 
 		// load the images for the droplet and the bucket, 64x64 pixels each
 		dropImage = new Texture(Gdx.files.internal("droplet.png"));
@@ -64,6 +66,7 @@ public class Drop extends ApplicationAdapter {
 		// create the raindrops array and spawn the first raindrop
 		raindrops = new Array<Rectangle>();
 		spawnRaindrop();
+		createStation();
 	}
 
 	private void spawnRaindrop() {
@@ -74,6 +77,30 @@ public class Drop extends ApplicationAdapter {
 		raindrop.height = 64;
 		raindrops.add(raindrop);
 		lastDropTime = TimeUtils.nanoTime();
+	}
+
+	private void createStation() {
+		BodyDef station1Def = new BodyDef();
+		BodyDef station2Def = new BodyDef();
+		BodyDef station3Def = new BodyDef();
+
+		station1Def.position.set(new Vector2(50, 300));
+		station2Def.position.set(new Vector2(350, 200));
+		station3Def.position.set(new Vector2(700, 400));
+
+		Body station1 = world.createBody(station1Def);
+		Body station2 = world.createBody(station2Def);
+		Body station3 = world.createBody(station3Def);
+
+		PolygonShape stationBox = new PolygonShape();
+
+		stationBox.setAsBox(20f, 20f);
+
+		station1.createFixture(stationBox, 0.0f);
+		station2.createFixture(stationBox, 0.0f);
+		station3.createFixture(stationBox, 0.0f);
+
+		stationBox.dispose();
 	}
 
 	@Override
@@ -87,18 +114,8 @@ public class Drop extends ApplicationAdapter {
 		// tell the camera to update its matrices.
 		camera.update();
 
-		// tell the SpriteBatch to render in the
-		// coordinate system specified by the camera.
-		batch.setProjectionMatrix(camera.combined);
 
-		// begin a new batch and draw the bucket and
-		// all drops
-		batch.begin();
-		batch.draw(bucketImage, bucket.x, bucket.y);
-		for(Rectangle raindrop: raindrops) {
-			batch.draw(dropImage, raindrop.x, raindrop.y);
-		}
-		batch.end();
+		debugRenderer.render(world, camera.combined);
 
 		// process user input
 		if(Gdx.input.isTouched()) {
@@ -129,6 +146,7 @@ public class Drop extends ApplicationAdapter {
 				iter.remove();
 			}
 		}
+		world.step(1/60f, 6, 2);
 	}
 
 	@Override
