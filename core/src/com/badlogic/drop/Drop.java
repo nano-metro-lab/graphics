@@ -27,7 +27,7 @@ public class Drop extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		// set input event listener
+		// Input event listener
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
@@ -67,8 +67,6 @@ public class Drop extends ApplicationAdapter {
 			@Override
 			public boolean mouseMoved(int x, int y) {
 				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
-				endPoint.set(x, y);
-				mouseMove();
 				return true;
 			}
 
@@ -78,9 +76,6 @@ public class Drop extends ApplicationAdapter {
 				return false;
 			}
 		});
-
-
-		// create world for box2d
 
 		world = new World(new Vector2(0, 0), true); // Todo
 		world.setContactListener(new ContactListener() {
@@ -114,40 +109,6 @@ public class Drop extends ApplicationAdapter {
 		createBox();
 	}
 
-	private boolean dragMode = false;
-	private Vector2 startPoint = new Vector2(0, 0);
-	private Vector2 endPoint = new Vector2(250, 250);
-
-	private Body line = null;
-	private void mouseDown() {
-		dragMode = true;
-	}
-
-	private void mouseMove() {
-		if (line != null) {
-			world.destroyBody(line);
-		}
-		PolygonShape lineShape = new PolygonShape();
-		lineShape.setAsBox((endPoint.x - startPoint.x)/2f, 10, new Vector2(0, 0), 15);
-
-		BodyDef lineBodyDef = new BodyDef();
-		lineBodyDef.position.set(new Vector2((endPoint.x - startPoint.x)/2f, (endPoint.y - startPoint.y)));
-
-		Body lineBody = world.createBody(lineBodyDef);
-		lineBody.createFixture(lineShape, 0.0f);
-
-		line = lineBody;
-
-
-
-	}
-
-	private void mouseUp() {
-		dragMode = false;
-	}
-
-
-
 	private void createBox() {
 		BodyDef station1Def = new BodyDef();
 		BodyDef station2Def = new BodyDef();
@@ -174,7 +135,6 @@ public class Drop extends ApplicationAdapter {
 
 		BodyDef mouseBoxDef = new BodyDef();
 		mouseBoxDef.position.set(new Vector2(0,0));
-		mouseBoxDef.type = BodyDef.BodyType.DynamicBody;
 		MouseBox = world.createBody(mouseBoxDef);
 		MouseBox.createFixture(generalBox, 0.0f);
 
