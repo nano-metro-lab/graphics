@@ -15,12 +15,13 @@ import com.badlogic.gdx.InputProcessor;
 
 
 public class Drop extends ApplicationAdapter {
-	private SpriteBatch batch;
+//	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
-
 	private Body MouseBox;
+
+	// connection joint array
 
 	public Drop() {
 	}
@@ -77,7 +78,7 @@ public class Drop extends ApplicationAdapter {
 			}
 		});
 
-		world = new World(new Vector2(0, 0), true); // Todo
+		world = new World(new Vector2(0, 0), true); // non-gravity
 		world.setContactListener(new ContactListener() {
 			@Override
 			public void beginContact(Contact contact) {
@@ -99,12 +100,13 @@ public class Drop extends ApplicationAdapter {
 				System.out.println("444");
 			}
 		}); // Collision listener
+
 		debugRenderer = new Box2DDebugRenderer();
 
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
-		batch = new SpriteBatch();
+//		batch = new SpriteBatch();
 
 		createBox();
 	}
@@ -168,6 +170,6 @@ public class Drop extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		batch.dispose();
+//		batch.dispose();
 	}
 }
