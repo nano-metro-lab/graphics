@@ -22,6 +22,7 @@ public class Drop extends ApplicationAdapter {
 	private Body MouseBox;
 
 	// connection joint array
+	private Array<Joint> connectionJoint;
 
 	public Drop() {
 	}
@@ -78,16 +79,16 @@ public class Drop extends ApplicationAdapter {
 			}
 		});
 
-		world = new World(new Vector2(0, 0), true); // non-gravity
+		world = new World(new Vector2(0, 0), false); // non-gravity Todo
 		world.setContactListener(new ContactListener() {
 			@Override
 			public void beginContact(Contact contact) {
-				System.out.println("111");
+				System.out.println("I'm in");
 			}
 
 			@Override
 			public void endContact(Contact contact) {
-				System.out.println("222");
+				System.out.println("I'm out");
 			}
 
 			@Override
@@ -111,36 +112,42 @@ public class Drop extends ApplicationAdapter {
 		createBox();
 	}
 
+	private void dragConnection() {
+
+	} // mouse clicked on body
+
 	private void createBox() {
-		BodyDef station1Def = new BodyDef();
-		BodyDef station2Def = new BodyDef();
-		BodyDef station3Def = new BodyDef();
-
-		station1Def.position.set(new Vector2(50, 300));
-		station2Def.position.set(new Vector2(350, 200));
-		station3Def.position.set(new Vector2(700, 400));
-
-		Body station1 = world.createBody(station1Def);
-		Body station2 = world.createBody(station2Def);
-		Body station3 = world.createBody(station3Def);
-
+		BodyDef stationDef = new BodyDef();
+		Body station1 = world.createBody(stationDef);
+		Body station2 = world.createBody(stationDef);
+		Body station3 = world.createBody(stationDef);
+		station1.setTransform(50, 300, 0);
+		station2.setTransform(350, 200, 0);
+		station3.setTransform(700, 400, 0);
 		PolygonShape generalBox = new PolygonShape();
-
 		generalBox.setAsBox(20f, 20f);
-
 		station1.createFixture(generalBox, 0.0f);
 		station2.createFixture(generalBox, 0.0f);
 		station3.createFixture(generalBox, 0.0f);
 
-		station1.setTransform(new Vector2(60, 60), 0);
-
-
 		BodyDef mouseBoxDef = new BodyDef();
 		mouseBoxDef.position.set(new Vector2(0,0));
+		mouseBoxDef.type = BodyDef.BodyType.DynamicBody;
 		MouseBox = world.createBody(mouseBoxDef);
-		MouseBox.createFixture(generalBox, 0.0f);
+
+		CircleShape circle = new CircleShape();
+		circle.setRadius(25f);
+
+		FixtureDef MouseBoxFixtureDef = new FixtureDef();
+		MouseBoxFixtureDef.isSensor = true;
+		MouseBoxFixtureDef.shape = circle;
+
+
+		MouseBox.createFixture(MouseBoxFixtureDef);
+
 
 		generalBox.dispose();
+		circle.dispose();
 
 
 	}
