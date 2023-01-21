@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import com.badlogic.gdx.InputProcessor;
 
+
 public class Drop extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -23,7 +24,6 @@ public class Drop extends ApplicationAdapter {
 
 	public Drop() {
 	}
-
 
 	@Override
 	public void create() {
@@ -45,23 +45,30 @@ public class Drop extends ApplicationAdapter {
 			}
 
 			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				return false;
+			public boolean touchDown(int x, int y, int pointer, int button) {
+				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
+				System.out.println("down");
+				return true;
 			}
 
 			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-				return false;
+			public boolean touchUp(int x, int y, int pointer, int button) {
+				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
+				System.out.println("up");
+				return true;
 			}
 
 			@Override
-			public boolean touchDragged(int screenX, int screenY, int pointer) {
-				return false;
+			public boolean touchDragged(int x, int y, int pointer) {
+				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
+				return true;
 			}
 
 			@Override
 			public boolean mouseMoved(int x, int y) {
 				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
+				endPoint.set(x, y);
+				mouseMove();
 				return true;
 			}
 
@@ -72,8 +79,31 @@ public class Drop extends ApplicationAdapter {
 			}
 		});
 
+
 		// create world for box2d
-		world = new World(new Vector2(0, 0), true);
+
+		world = new World(new Vector2(0, 0), true); // Todo
+		world.setContactListener(new ContactListener() {
+			@Override
+			public void beginContact(Contact contact) {
+				System.out.println("111");
+			}
+
+			@Override
+			public void endContact(Contact contact) {
+				System.out.println("222");
+			}
+
+			@Override
+			public void preSolve(Contact contact, Manifold oldManifold) {
+				System.out.println("333");
+			}
+
+			@Override
+			public void postSolve(Contact contact, ContactImpulse impulse) {
+				System.out.println("444");
+			}
+		}); // Collision listener
 		debugRenderer = new Box2DDebugRenderer();
 
 		// create the camera and the SpriteBatch
@@ -83,6 +113,39 @@ public class Drop extends ApplicationAdapter {
 
 		createBox();
 	}
+
+	private boolean dragMode = false;
+	private Vector2 startPoint = new Vector2(0, 0);
+	private Vector2 endPoint = new Vector2(250, 250);
+
+	private Body line = null;
+	private void mouseDown() {
+		dragMode = true;
+	}
+
+	private void mouseMove() {
+		if (line != null) {
+			world.destroyBody(line);
+		}
+		PolygonShape lineShape = new PolygonShape();
+		lineShape.setAsBox((endPoint.x - startPoint.x)/2f, 10, new Vector2(0, 0), 15);
+
+		BodyDef lineBodyDef = new BodyDef();
+		lineBodyDef.position.set(new Vector2((endPoint.x - startPoint.x)/2f, (endPoint.y - startPoint.y)));
+
+		Body lineBody = world.createBody(lineBodyDef);
+		lineBody.createFixture(lineShape, 0.0f);
+
+		line = lineBody;
+
+
+
+	}
+
+	private void mouseUp() {
+		dragMode = false;
+	}
+
 
 
 	private void createBox() {
@@ -111,7 +174,7 @@ public class Drop extends ApplicationAdapter {
 
 		BodyDef mouseBoxDef = new BodyDef();
 		mouseBoxDef.position.set(new Vector2(0,0));
-		mouseBoxDef.type = BodyDef.BodyType.KinematicBody;
+		mouseBoxDef.type = BodyDef.BodyType.DynamicBody;
 		MouseBox = world.createBody(mouseBoxDef);
 		MouseBox.createFixture(generalBox, 0.0f);
 
