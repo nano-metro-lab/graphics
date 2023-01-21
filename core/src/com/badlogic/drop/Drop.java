@@ -1,85 +1,91 @@
 package com.badlogic.drop;
-
 import java.util.Iterator;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
+
+import com.badlogic.gdx.InputProcessor;
 
 public class Drop extends ApplicationAdapter {
-	private Texture dropImage;
-	private Texture bucketImage;
-	private Sound dropSound;
-	private Music rainMusic;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
-	private Rectangle bucket;
-	private Array<Rectangle> raindrops;
-	private long lastDropTime;
-
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 
+	private Body MouseBox;
+
+	public Drop() {
+	}
+
+
 	@Override
 	public void create() {
-		// create world for BOX2D
+		// set input event listener
+		Gdx.input.setInputProcessor(new InputProcessor() {
+			@Override
+			public boolean keyDown(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyTyped(char character) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				return false;
+			}
+
+			@Override
+			public boolean mouseMoved(int x, int y) {
+				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
+				return true;
+			}
+
+
+			@Override
+			public boolean scrolled(float amountX, float amountY) {
+				return false;
+			}
+		});
+
+		// create world for box2d
 		world = new World(new Vector2(0, 0), true);
 		debugRenderer = new Box2DDebugRenderer();
-
-		// load the images for the droplet and the bucket, 64x64 pixels each
-		dropImage = new Texture(Gdx.files.internal("droplet.png"));
-		bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-
-		// load the drop sound effect and the rain background "music"
-		dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
-		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-
-		// start the playback of the background music immediately
-		rainMusic.setLooping(true);
-		rainMusic.play();
 
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
 
-		// create a Rectangle to logically represent the bucket
-		bucket = new Rectangle();
-		bucket.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-		bucket.y = 20; // bottom left corner of the bucket is 20 pixels above the bottom screen edge
-		bucket.width = 64;
-		bucket.height = 64;
-
-		// create the raindrops array and spawn the first raindrop
-		raindrops = new Array<Rectangle>();
-		spawnRaindrop();
-		createStation();
+		createBox();
 	}
 
-	private void spawnRaindrop() {
-		Rectangle raindrop = new Rectangle();
-		raindrop.x = MathUtils.random(0, 800-64);
-		raindrop.y = 480;
-		raindrop.width = 64;
-		raindrop.height = 64;
-		raindrops.add(raindrop);
-		lastDropTime = TimeUtils.nanoTime();
-	}
 
-	private void createStation() {
+	private void createBox() {
 		BodyDef station1Def = new BodyDef();
 		BodyDef station2Def = new BodyDef();
 		BodyDef station3Def = new BodyDef();
@@ -92,16 +98,32 @@ public class Drop extends ApplicationAdapter {
 		Body station2 = world.createBody(station2Def);
 		Body station3 = world.createBody(station3Def);
 
-		PolygonShape stationBox = new PolygonShape();
+		PolygonShape generalBox = new PolygonShape();
 
-		stationBox.setAsBox(20f, 20f);
+		generalBox.setAsBox(20f, 20f);
 
-		station1.createFixture(stationBox, 0.0f);
-		station2.createFixture(stationBox, 0.0f);
-		station3.createFixture(stationBox, 0.0f);
+		station1.createFixture(generalBox, 0.0f);
+		station2.createFixture(generalBox, 0.0f);
+		station3.createFixture(generalBox, 0.0f);
 
-		stationBox.dispose();
+		station1.setTransform(new Vector2(60, 60), 0);
+
+
+		BodyDef mouseBoxDef = new BodyDef();
+		mouseBoxDef.position.set(new Vector2(0,0));
+		mouseBoxDef.type = BodyDef.BodyType.KinematicBody;
+		MouseBox = world.createBody(mouseBoxDef);
+		MouseBox.createFixture(generalBox, 0.0f);
+
+		generalBox.dispose();
+
+
 	}
+
+
+
+
+
 
 	@Override
 	public void render() {
@@ -117,45 +139,12 @@ public class Drop extends ApplicationAdapter {
 
 		debugRenderer.render(world, camera.combined);
 
-		// process user input
-		if(Gdx.input.isTouched()) {
-			Vector3 touchPos = new Vector3();
-			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			camera.unproject(touchPos);
-			bucket.x = touchPos.x - 64 / 2;
-		}
-		if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
-
-		// make sure the bucket stays within the screen bounds
-		if(bucket.x < 0) bucket.x = 0;
-		if(bucket.x > 800 - 64) bucket.x = 800 - 64;
-
-		// check if we need to create a new raindrop
-		if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
-
-		// move the raindrops, remove any that are beneath the bottom edge of
-		// the screen or that hit the bucket. In the latter case we play back
-		// a sound effect as well.
-		for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
-			Rectangle raindrop = iter.next();
-			raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-			if(raindrop.y + 64 < 0) iter.remove();
-			if(raindrop.overlaps(bucket)) {
-				dropSound.play();
-				iter.remove();
-			}
-		}
 		world.step(1/60f, 6, 2);
 	}
 
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		dropImage.dispose();
-		bucketImage.dispose();
-		dropSound.dispose();
-		rainMusic.dispose();
 		batch.dispose();
 	}
 }
