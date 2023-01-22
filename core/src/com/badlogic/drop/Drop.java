@@ -7,7 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -88,17 +91,17 @@ public class Drop extends ApplicationAdapter {
 
 			@Override
 			public void endContact(Contact contact) {
+//				dragConnection(contact.getFixtureA().getBody(), contact.getFixtureB().getBody());
 				System.out.println("I'm out");
+				testCreateJoint = true;
 			}
 
 			@Override
 			public void preSolve(Contact contact, Manifold oldManifold) {
-				System.out.println("333");
 			}
 
 			@Override
 			public void postSolve(Contact contact, ContactImpulse impulse) {
-				System.out.println("444");
 			}
 		}); // Collision listener
 
@@ -112,11 +115,21 @@ public class Drop extends ApplicationAdapter {
 		createBox();
 	}
 
-	private void dragConnection() {
+	private boolean testCreateJoint = false;
+
+	private Body testbodyB = null;
+	private Body testbodyA = null;
+	private void dragConnection(Body bodyA, Body bodyB) {
+//		PrismaticJointDef pDef = new PrismaticJointDef();
+//		pDef.bodyA = testbodyA;
+//		pDef.bodyB = testbodyB;
+//		Joint j = world.createJoint(pDef);
 
 	} // mouse clicked on body
 
 	private void createBox() {
+		// Todo should wrap station and assign uuid to each obj
+		// Todo should implement simple BUS, to broadcast events to other components
 		BodyDef stationDef = new BodyDef();
 		Body station1 = world.createBody(stationDef);
 		Body station2 = world.createBody(stationDef);
@@ -129,6 +142,9 @@ public class Drop extends ApplicationAdapter {
 		station1.createFixture(generalBox, 0.0f);
 		station2.createFixture(generalBox, 0.0f);
 		station3.createFixture(generalBox, 0.0f);
+
+		testbodyB = station3;
+		testbodyA = station1;
 
 		BodyDef mouseBoxDef = new BodyDef();
 		mouseBoxDef.position.set(new Vector2(0,0));
@@ -145,16 +161,11 @@ public class Drop extends ApplicationAdapter {
 
 		MouseBox.createFixture(MouseBoxFixtureDef);
 
-
 		generalBox.dispose();
 		circle.dispose();
 
 
 	}
-
-
-
-
 
 
 	@Override
@@ -167,6 +178,14 @@ public class Drop extends ApplicationAdapter {
 
 		// tell the camera to update its matrices.
 		camera.update();
+
+		if (testCreateJoint!=false) {
+
+			PrismaticJointDef pDef = new PrismaticJointDef();
+			pDef.bodyA = testbodyA;
+			pDef.bodyB = testbodyB;
+			world.createJoint(pDef);
+		}
 
 
 		debugRenderer.render(world, camera.combined);
