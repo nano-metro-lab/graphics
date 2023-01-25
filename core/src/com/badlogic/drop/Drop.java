@@ -16,153 +16,59 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import com.badlogic.gdx.InputProcessor;
 
-
 public class Drop extends ApplicationAdapter {
-//	private SpriteBatch batch;
+	private SpriteBatch batch;
 	private OrthographicCamera camera;
-	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private Body MouseBox;
 
 	// connection joint array
 	private Array<Joint> connectionJoint;
-
+	static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	public Drop() {
 	}
 
 	@Override
 	public void create() {
-		// Input event listener
-		Gdx.input.setInputProcessor(new InputProcessor() {
-			@Override
-			public boolean keyDown(int keycode) {
-				return false;
-			}
+		// Todo Input event listener
 
-			@Override
-			public boolean keyUp(int keycode) {
-				return false;
-			}
-
-			@Override
-			public boolean keyTyped(char character) {
-				return false;
-			}
-
-			@Override
-			public boolean touchDown(int x, int y, int pointer, int button) {
-				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
-				System.out.println("down");
-				return true;
-			}
-
-			@Override
-			public boolean touchUp(int x, int y, int pointer, int button) {
-				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
-				System.out.println("up");
-				return true;
-			}
-
-			@Override
-			public boolean touchDragged(int x, int y, int pointer) {
-				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
-				return true;
-			}
-
-			@Override
-			public boolean mouseMoved(int x, int y) {
-				MouseBox.setTransform(new Vector2(x, y * -1 + 480), 0);
-				return true;
-			}
-
-
-			@Override
-			public boolean scrolled(float amountX, float amountY) {
-				return false;
-			}
-		});
-
-		world = new World(new Vector2(0, 0), false); // non-gravity Todo
-		world.setContactListener(new ContactListener() {
-			@Override
-			public void beginContact(Contact contact) {
-				System.out.println("I'm in");
-			}
-
-			@Override
-			public void endContact(Contact contact) {
-//				dragConnection(contact.getFixtureA().getBody(), contact.getFixtureB().getBody());
-				System.out.println("I'm out");
-				testCreateJoint = true;
-			}
-
-			@Override
-			public void preSolve(Contact contact, Manifold oldManifold) {
-			}
-
-			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {
-			}
-		}); // Collision listener
-
+		// Todo Contact listener
 		debugRenderer = new Box2DDebugRenderer();
-
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
-//		batch = new SpriteBatch();
+		camera.setToOrtho(false, 40, 40);
+		batch = new SpriteBatch();
 
 		createBox();
+
 	}
 
 	private boolean testCreateJoint = false;
 
-	private Body testbodyB = null;
-	private Body testbodyA = null;
-	private void dragConnection(Body bodyA, Body bodyB) {
-//		PrismaticJointDef pDef = new PrismaticJointDef();
-//		pDef.bodyA = testbodyA;
-//		pDef.bodyB = testbodyB;
-//		Joint j = world.createJoint(pDef);
-
-	} // mouse clicked on body
-
 	private void createBox() {
 		// Todo should wrap station and assign uuid to each obj
 		// Todo should implement simple BUS, to broadcast events to other components
-		BodyDef stationDef = new BodyDef();
-		Body station1 = world.createBody(stationDef);
-		Body station2 = world.createBody(stationDef);
-		Body station3 = world.createBody(stationDef);
-		station1.setTransform(50, 300, 0);
-		station2.setTransform(350, 200, 0);
-		station3.setTransform(700, 400, 0);
-		PolygonShape generalBox = new PolygonShape();
-		generalBox.setAsBox(20f, 20f);
-		station1.createFixture(generalBox, 0.0f);
-		station2.createFixture(generalBox, 0.0f);
-		station3.createFixture(generalBox, 0.0f);
 
-		testbodyB = station3;
-		testbodyA = station1;
+		Location l1 = new Location(12, 9, Location.LocationType.SQUARE);
+		Location l2 = new Location(29, 20, Location.LocationType.CIRCLE);
+		Location l3 = new Location(20, 30, Location.LocationType.TRIANGLE);
 
-		BodyDef mouseBoxDef = new BodyDef();
-		mouseBoxDef.position.set(new Vector2(0,0));
-		mouseBoxDef.type = BodyDef.BodyType.DynamicBody;
-		MouseBox = world.createBody(mouseBoxDef);
-
-		CircleShape circle = new CircleShape();
-		circle.setRadius(25f);
-
-		FixtureDef MouseBoxFixtureDef = new FixtureDef();
-		MouseBoxFixtureDef.isSensor = true;
-		MouseBoxFixtureDef.shape = circle;
+//
+//		Station station1 = new Station(l1);
+//		Station station2 = new Station(l2);
+//		Station station3 = new Station(l3);
 
 
-		MouseBox.createFixture(MouseBoxFixtureDef);
+		Line line1 = new Line();
+		line1.addStation(l1);
+		line1.addStation(l2);
+		line1.addStation(l3);
+		System.out.println(line1.stationList);
 
-		generalBox.dispose();
-		circle.dispose();
+//		line1.removeConnection(station2, station3);
+//		System.out.println(line1.stationList);
+//		line1.removeConnection(station1, station2);
+//		System.out.println(line1.stationList);
 
 
 	}
@@ -179,13 +85,6 @@ public class Drop extends ApplicationAdapter {
 		// tell the camera to update its matrices.
 		camera.update();
 
-		if (testCreateJoint!=false) {
-
-			PrismaticJointDef pDef = new PrismaticJointDef();
-			pDef.bodyA = testbodyA;
-			pDef.bodyB = testbodyB;
-			world.createJoint(pDef);
-		}
 
 
 		debugRenderer.render(world, camera.combined);
