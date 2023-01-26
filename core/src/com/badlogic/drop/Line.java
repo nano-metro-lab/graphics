@@ -17,11 +17,13 @@ public class Line {
     static World world;
     public List<Station> stationList;
     public Color lineColor;
+    public CatmullRomSpline<Vector2> track;
 
     public Line(Color lineColor) { // Todo take args?
         this.lineColor = lineColor;
         this.world = Drop.world;
         this.stationList = new ArrayList<Station>(10);
+
     }
 
     public void addStation(Location location) {
@@ -39,6 +41,10 @@ public class Line {
         addJoint(previousStation, station);
     }
 
+    public CatmullRomSpline<Vector2> getTrack() {
+        return this.track;
+    }
+
     int k = 100;
     Vector2[] cachedPoints = new Vector2[k];
     private void calculateTrack() {
@@ -50,10 +56,10 @@ public class Line {
             controlPoints[i + 1] = this.stationList.get(i).location.getPosition();
         }
 
-        CatmullRomSpline<Vector2> track = new CatmullRomSpline<>(controlPoints, false);
+        this.track = new CatmullRomSpline<>(controlPoints, false);
         for (int i = 0; i < k; i++) {
             cachedPoints[i] = new Vector2();
-            track.valueAt(cachedPoints[i], ((float)i)/((float)k-1));
+            this.track.valueAt(cachedPoints[i], ((float)i)/((float)k-1));
         }
         // Cache when created, path will be used by train travel also
 

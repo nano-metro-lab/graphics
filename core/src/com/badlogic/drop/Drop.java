@@ -137,9 +137,15 @@ public class Drop extends ApplicationAdapter {
 		this.lineList.add(line1);
 		this.lineList.add(line2);
 
+		Train t1 = new Train(line1);
+		testTrain = t1;
+//		t1.run();
+
 		shape.setProjectionMatrix(camera.combined);
 
 	}
+
+	private Train testTrain;
 
 
 	@Override
@@ -161,6 +167,7 @@ public class Drop extends ApplicationAdapter {
 		for (Line line : lineList) {
 			line.draw(shape);
 		}
+		testTrain.run();
 
 		world.step(1/60f, 6, 2);
 	}
