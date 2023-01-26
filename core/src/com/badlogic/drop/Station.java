@@ -12,6 +12,7 @@ import java.util.Map;
 public class Station {
     static World world = Drop.world;
     public Body stationBody;
+    public Location location;
 
 
     public Station(Location location) {
@@ -22,6 +23,7 @@ public class Station {
         this.stationBody.createFixture(stationShape, 0.0f);
         setStation(location.getPosition());
         stationShape.dispose();
+        this.location = location;
     }
 
     public void setStation(Vector2 position) {
