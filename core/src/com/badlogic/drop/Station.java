@@ -26,6 +26,10 @@ public class Station {
         this.location = location;
     }
 
+    public void destroy() {
+        // Todo
+    }
+
     public void setStation(Vector2 position) {
         stationBody.setTransform(position.x, position.y, 0);
     }

@@ -3,7 +3,6 @@ package com.badlogic.drop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +17,7 @@ public class Line {
     public List<Station> stationList;
     public Color lineColor;
     public CatmullRomSpline<Vector2> track;
+    private Vector2 controlPoint;
 
     public Line(Color lineColor) { // Todo take args?
         this.lineColor = lineColor;
@@ -26,10 +26,50 @@ public class Line {
 
     }
 
-    public void addStation(Location location) {
+    public void push(Location location) {
+        this.add(location, this.stationList.size());
+    }
+
+    public void add(Location location, int index) {
         Station s = new Station(location);
-        this.stationList.add(s);
-//        addConnection(s);
+        if (index > this.stationList.size()) {
+            return;
+        } else {
+            this.stationList.add(index, s);
+        }
+        if (this.stationList.size() < 2) return;
+        calculateTrack();
+    }
+
+    public void remove(Location location) {
+        Station stationToRemove = null;
+        for (Station s : this.stationList) {
+            if (s.location == location) {
+                stationToRemove = s;
+            }
+        }
+        this.stationList.remove(stationToRemove);
+        if (this.stationList.size() < 2) return;
+        calculateTrack();
+    }
+
+    // Todo head? middle?
+    public void setControlPoint(float x, float y) {
+        this.controlPoint = new Vector2(x, y);
+        this.calculateTrack();
+    }
+
+    public void removeControlPoint() {
+        this.controlPoint = null;
+    }
+
+
+    public void addStation(Location location, Station previousStation) {
+        Station s = new Station(location);
+        if (!this.stationList.contains(previousStation)) {
+            return;
+        }
+        this.stationList.add(this.stationList.indexOf(previousStation) + 1, s);
         if (this.stationList.size() < 2) return;
         calculateTrack();
     }
@@ -48,20 +88,40 @@ public class Line {
     int k = 100;
     Vector2[] cachedPoints = new Vector2[k];
     private void calculateTrack() {
-        Vector2[] controlPoints = new Vector2[this.stationList.size() + 2];
-        controlPoints[0] = this.stationList.get(0).location.getPosition();
-        controlPoints[controlPoints.length - 1] = this.stationList.get(this.stationList.size() - 1).location.getPosition();
+        if (this.controlPoint == null) {
+            Vector2[] controlPoints = new Vector2[this.stationList.size() + 2];
+            controlPoints[0] = this.stationList.get(0).location.getPosition();
+            controlPoints[controlPoints.length - 1] = this.stationList.get(this.stationList.size() - 1).location.getPosition();
 
-        for (int i = 0; i < this.stationList.size() ; i++) {
-            controlPoints[i + 1] = this.stationList.get(i).location.getPosition();
+            for (int i = 0; i < this.stationList.size() ; i++) {
+                // Todo should recognize control point
+                controlPoints[i + 1] = this.stationList.get(i).location.getPosition();
+            }
+
+            this.track = new CatmullRomSpline<>(controlPoints, false);
+            for (int i = 0; i < k; i++) {
+                cachedPoints[i] = new Vector2();
+                this.track.valueAt(cachedPoints[i], ((float)i)/((float)k-1));
+            }
+            // Cache when created, path will be used by train travel also
+        } else {
+            Vector2[] controlPoints = new Vector2[this.stationList.size() + 3];
+            controlPoints[0] = this.stationList.get(0).location.getPosition();
+            controlPoints[controlPoints.length - 1] = this.controlPoint;
+            controlPoints[controlPoints.length - 2] = this.controlPoint;
+
+            for (int i = 0; i < this.stationList.size() ; i++) {
+                // Todo should recognize control point
+                controlPoints[i + 1] = this.stationList.get(i).location.getPosition();
+            }
+
+            this.track = new CatmullRomSpline<>(controlPoints, false);
+            for (int i = 0; i < k; i++) {
+                cachedPoints[i] = new Vector2();
+                this.track.valueAt(cachedPoints[i], ((float)i)/((float)k-1));
+            }
         }
 
-        this.track = new CatmullRomSpline<>(controlPoints, false);
-        for (int i = 0; i < k; i++) {
-            cachedPoints[i] = new Vector2();
-            this.track.valueAt(cachedPoints[i], ((float)i)/((float)k-1));
-        }
-        // Cache when created, path will be used by train travel also
 
     }
 

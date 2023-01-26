@@ -1,3 +1,10 @@
+/*
+This is the main entry point.
+It names Drop, because this project uses libGDX's Drop tutorial project as the basis.
+ */
+
+
+
 package com.badlogic.drop;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -11,7 +18,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -30,6 +36,8 @@ public class Drop extends ApplicationAdapter {
 
 	static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	private Line testLine;
+	private List<Line> lineList = new ArrayList<Line>(5);
+	private List<Train> trainList = new ArrayList<Train>(5);
 
 	public Drop() {
 	}
@@ -52,7 +60,6 @@ public class Drop extends ApplicationAdapter {
 
 	}
 
-	private List<Line> lineList = new ArrayList<Line>(5);
 	private void setInputProcessor() {
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			@Override
@@ -72,12 +79,10 @@ public class Drop extends ApplicationAdapter {
 
 			@Override
 			public boolean touchDown(int x, int y, int pointer, int button) {
-				System.out.println(x);
-				System.out.println(y);
 				Vector3 mousePosition = new Vector3(x, y, 0);
 				camera.unproject(mousePosition);
 //				viewport.
-				testLine.addStation(new Location(mousePosition.x, mousePosition.y, Location.LocationType.SQUARE));
+				testLine.push(new Location(mousePosition.x, mousePosition.y, Location.LocationType.SQUARE));
 				return true;
 			}
 
@@ -93,7 +98,10 @@ public class Drop extends ApplicationAdapter {
 
 			@Override
 			public boolean mouseMoved(int x, int y) {
-				return false;
+				Vector3 mousePosition = new Vector3(x, y, 0);
+				camera.unproject(mousePosition);
+				testLine.setControlPoint(mousePosition.x, mousePosition.y);
+				return true;
 			}
 
 
@@ -116,30 +124,32 @@ public class Drop extends ApplicationAdapter {
 		Location l6 = new Location(5, 9, Location.LocationType.CIRCLE);
 
 		Line line1 = new Line(Color.valueOf("#FF005587"));
-		line1.addStation(l6);
-		line1.addStation(l1);
-		line1.addStation(l2);
-		line1.addStation(l3);
-		line1.addStation(l5);
+		line1.push(l6);
+		line1.push(l1);
+		line1.push(l2);
+		line1.push(l3);
+//		line1.pushStation(l5);
+//		line1.addStation(l5, line1.stationList.get(line1.stationList.size() - 1));
+		line1.add(l5, 4);
+		line1.remove(l5);
 
 		Line line2 = new Line(Color.valueOf("#0FFFF384"));
-		line2.addStation(l5);
-		line2.addStation(l3);
-		line2.addStation(l2);
-		line2.addStation(l4);
-		line2.addStation(l1);
-		line2.addStation(l6);
-
-		System.out.println(line1.stationList);
-
-		testLine = line1;
+		line2.push(l5);
+		line2.push(l3);
+		line2.push(l2);
+		line2.push(l4);
+		line2.push(l1);
+		line2.push(l6);
 
 		this.lineList.add(line1);
 		this.lineList.add(line2);
+		testLine = line1;
 
 		Train t1 = new Train(line1);
-		testTrain = t1;
-//		t1.run();
+		Train t2 = new Train(line2);
+		this.trainList.add(t1);
+		this.trainList.add(t2);
+
 
 		shape.setProjectionMatrix(camera.combined);
 
@@ -160,15 +170,18 @@ public class Drop extends ApplicationAdapter {
 
 		// tell the camera to update its matrices.
 		camera.update();
-
-
-		Gdx.gl.glLineWidth(5);
-		debugRenderer.render(world, camera.combined);
+		// shape renderer
 		for (Line line : lineList) {
 			line.draw(shape);
 		}
-		testTrain.run();
 
+		// libgdx
+		Gdx.gl.glLineWidth(4);
+		debugRenderer.render(world, camera.combined);
+		for (Train train : trainList) {
+			Gdx.gl.glLineWidth(5);
+			train.run();
+		}
 		world.step(1/60f, 6, 2);
 	}
 
