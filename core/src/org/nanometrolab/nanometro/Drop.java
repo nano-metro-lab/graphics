@@ -1,15 +1,16 @@
-package com.badlogic.drop;
+package org.nanometrolab.nanometro;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -32,7 +33,6 @@ public class Drop extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-
 		// Todo Input event listener
 
 		// Todo Contact listener
@@ -40,15 +40,70 @@ public class Drop extends ApplicationAdapter {
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 40, 40);
-		viewport = new FillViewport(900, 900, camera);
+		viewport = new FillViewport(500, 500, camera);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
+		setInputProcessor();
 
 		createBox();
 
 	}
 
 	private List<Line> lineList = new ArrayList<Line>(5);
+	private Line testLine;
+	private void setInputProcessor() {
+		Gdx.input.setInputProcessor(new InputProcessor() {
+			@Override
+			public boolean keyDown(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyTyped(char character) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(int x, int y, int pointer, int button) {
+				System.out.println(x);
+				System.out.println(y);
+				Vector3 mousePosition = new Vector3(x, y, 0);
+				camera.unproject(mousePosition);
+//				viewport.
+				testLine.addStation(new Location(mousePosition.x, mousePosition.y, Location.LocationType.SQUARE));
+				return true;
+			}
+
+			@Override
+			public boolean touchUp(int x, int y, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDragged(int x, int y, int pointer) {
+				return false;
+			}
+
+			@Override
+			public boolean mouseMoved(int x, int y) {
+				return false;
+			}
+
+
+			@Override
+			public boolean scrolled(float amountX, float amountY) {
+				return false;
+			}
+		});
+
+	}
+
+
 
 	private void createBox() {
 		// Todo should wrap station and assign uuid to each obj
@@ -76,6 +131,7 @@ public class Drop extends ApplicationAdapter {
 		line2.addStation(l1);
 		line2.addStation(l6);
 
+		testLine = line1;
 		System.out.println(line1.stationList);
 
 		this.lineList.add(line1);
@@ -84,7 +140,6 @@ public class Drop extends ApplicationAdapter {
 		shape.setProjectionMatrix(camera.combined);
 
 	}
-	private Line testLine;
 
 
 	@Override

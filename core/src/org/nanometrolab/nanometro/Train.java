@@ -1,4 +1,4 @@
-package com.badlogic.drop;
+package org.nanometrolab.nanometro;
 
 import com.badlogic.gdx.physics.box2d.World;
 
