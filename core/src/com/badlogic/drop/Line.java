@@ -69,7 +69,7 @@ public class Line {
     public void draw(ShapeRenderer shape) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glLineWidth(18);
+        Gdx.gl.glLineWidth(25);
         if (stationList.size() < 2) return;
         shape.begin(ShapeRenderer.ShapeType.Line);
         shape.setColor(this.lineColor);
