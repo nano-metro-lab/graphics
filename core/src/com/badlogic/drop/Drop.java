@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,8 +26,6 @@ public class Drop extends ApplicationAdapter {
 	private Box2DDebugRenderer debugRenderer;
 	private Body MouseBox;
 
-	// connection joint array
-	private Array<Joint> connectionJoint;
 	static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	public Drop() {
 	}
@@ -84,12 +81,6 @@ public class Drop extends ApplicationAdapter {
 		this.lineList.add(line1);
 		this.lineList.add(line2);
 
-//		line1.popStation();
-
-//		line1.removeConnection(station2, station3);
-//		System.out.println(line1.stationList);
-//		line1.removeConnection(station1, station2);
-//		System.out.println(line1.stationList);
 		shape.setProjectionMatrix(camera.combined);
 
 	}
@@ -104,7 +95,6 @@ public class Drop extends ApplicationAdapter {
 		// of the color to be used to clear the screen.
 //		ScreenUtils.clear(0, 0, 0.2f, 1);
 		ScreenUtils.clear(Color.valueOf("#002B4AFF"));
-//		ScreenUtils.clear(Color.valueOf("#1C000987"));
 
 		// tell the camera to update its matrices.
 		camera.update();
@@ -122,6 +112,7 @@ public class Drop extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-//		batch.dispose();
+		batch.dispose();
+		shape.dispose();
 	}
 }

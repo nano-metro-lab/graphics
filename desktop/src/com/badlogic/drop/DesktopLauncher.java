@@ -8,7 +8,7 @@ import com.badlogic.drop.Drop;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setTitle("JYJ's Unspeakable Experiment");
+		config.setTitle("Demo");
 		config.setWindowedMode(900, 900);
 		config.useVsync(true);
 		config.setForegroundFPS(60);
