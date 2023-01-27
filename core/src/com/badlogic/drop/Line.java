@@ -44,7 +44,7 @@ public class Line {
     public void remove(Location location) {
         Station stationToRemove = null;
         for (Station s : this.stationList) {
-            if (s.location == location) {
+            if (s.getPosition() == location.getPosition()) {
                 stationToRemove = s;
             }
         }

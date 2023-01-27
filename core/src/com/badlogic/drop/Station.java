@@ -3,17 +3,26 @@ package com.badlogic.drop;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 
 public class Station {
     static World world = Drop.world;
     public Body stationBody;
     public Location location;
+    private Vector2 position;
+    private Vector2 controlPoint;
+    public boolean isTrackStarter = false;
 
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public Vector2 getControlPoint() {
+        return controlPoint;
+    }
+    public void setControlPoint(Vector2 controlPoint) {
+        this.controlPoint = controlPoint;
+    }
 
     public Station(Location location) {
         BodyDef stationBodyDef = new BodyDef();
@@ -24,7 +33,10 @@ public class Station {
         setStation(location.getPosition());
         stationShape.dispose();
         this.location = location;
+        this.position = location.getPosition();
+        this.controlPoint = null;
     }
+
 
     public void destroy() {
         // Todo
