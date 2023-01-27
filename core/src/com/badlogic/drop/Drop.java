@@ -55,63 +55,63 @@ public class Drop extends ApplicationAdapter {
 		viewport = new FillViewport(900, 900, camera);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
-		setInputProcessor();
+//		setInputProcessor();
 		createBox();
 
 	}
 
-	private void setInputProcessor() {
-		Gdx.input.setInputProcessor(new InputProcessor() {
-			@Override
-			public boolean keyDown(int keycode) {
-				return false;
-			}
-
-			@Override
-			public boolean keyUp(int keycode) {
-				return false;
-			}
-
-			@Override
-			public boolean keyTyped(char character) {
-				return false;
-			}
-
-			@Override
-			public boolean touchDown(int x, int y, int pointer, int button) {
-				Vector3 mousePosition = new Vector3(x, y, 0);
-				camera.unproject(mousePosition);
-//				viewport.
-				testLine.push(new Location(mousePosition.x, mousePosition.y, Location.LocationType.SQUARE));
-				return true;
-			}
-
-			@Override
-			public boolean touchUp(int x, int y, int pointer, int button) {
-				return false;
-			}
-
-			@Override
-			public boolean touchDragged(int x, int y, int pointer) {
-				return false;
-			}
-
-			@Override
-			public boolean mouseMoved(int x, int y) {
-				Vector3 mousePosition = new Vector3(x, y, 0);
-				camera.unproject(mousePosition);
-				testLine.setControlPoint(mousePosition.x, mousePosition.y);
-				return true;
-			}
-
-
-			@Override
-			public boolean scrolled(float amountX, float amountY) {
-				return false;
-			}
-		});
-
-	}
+//	private void setInputProcessor() {
+//		Gdx.input.setInputProcessor(new InputProcessor() {
+//			@Override
+//			public boolean keyDown(int keycode) {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean keyUp(int keycode) {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean keyTyped(char character) {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean touchDown(int x, int y, int pointer, int button) {
+//				Vector3 mousePosition = new Vector3(x, y, 0);
+//				camera.unproject(mousePosition);
+////				viewport.
+//				testLine.push(new Location(mousePosition.x, mousePosition.y, Location.LocationType.SQUARE));
+//				return true;
+//			}
+//
+//			@Override
+//			public boolean touchUp(int x, int y, int pointer, int button) {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean touchDragged(int x, int y, int pointer) {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean mouseMoved(int x, int y) {
+//				Vector3 mousePosition = new Vector3(x, y, 0);
+//				camera.unproject(mousePosition);
+//				testLine.setControlPoint(mousePosition.x, mousePosition.y);
+//				return true;
+//			}
+//
+//
+//			@Override
+//			public boolean scrolled(float amountX, float amountY) {
+//				return false;
+//			}
+//		});
+//
+//	}
 	private void createBox() {
 		// Todo should wrap station and assign uuid to each obj
 		// Todo should implement simple BUS, to broadcast events to other components
@@ -123,6 +123,11 @@ public class Drop extends ApplicationAdapter {
 		Location l5 = new Location(12, 35, Location.LocationType.CIRCLE);
 		Location l6 = new Location(5, 9, Location.LocationType.CIRCLE);
 
+		Location l10 = new Location(0, 0, Location.LocationType.CIRCLE);
+		Location l11 = new Location(3, 0, Location.LocationType.CIRCLE);
+		Location l12 = new Location(3, 3, Location.LocationType.CIRCLE);
+		Location l13 = new Location(6, 6, Location.LocationType.CIRCLE);
+
 		Line line1 = new Line(Color.valueOf("#FF005587"));
 		line1.push(l6);
 		line1.push(l1);
@@ -130,25 +135,32 @@ public class Drop extends ApplicationAdapter {
 		line1.push(l3);
 //		line1.pushStation(l5);
 //		line1.addStation(l5, line1.stationList.get(line1.stationList.size() - 1));
-		line1.add(l5, 4);
-		line1.remove(l5);
+
 
 		Line line2 = new Line(Color.valueOf("#0FFFF384"));
 		line2.push(l5);
 		line2.push(l3);
 		line2.push(l2);
 		line2.push(l4);
-		line2.push(l1);
-		line2.push(l6);
+
+
+		Line line3 = new Line(Color.CYAN);
+		line3.push(l10);
+		line3.push(l11);
+		line3.push(l12);
+		line3.push(l13);
+
 
 		this.lineList.add(line1);
 		this.lineList.add(line2);
+
+		this.lineList.add(line3);
 		testLine = line1;
 
-		Train t1 = new Train(line1);
-		Train t2 = new Train(line2);
-		this.trainList.add(t1);
-		this.trainList.add(t2);
+//		Train t1 = new Train(line1);
+//		Train t2 = new Train(line2);
+//		this.trainList.add(t1);
+//		this.trainList.add(t2);
 
 
 		shape.setProjectionMatrix(camera.combined);
@@ -178,10 +190,10 @@ public class Drop extends ApplicationAdapter {
 		// libgdx
 		Gdx.gl.glLineWidth(4);
 		debugRenderer.render(world, camera.combined);
-		for (Train train : trainList) {
-			Gdx.gl.glLineWidth(5);
-			train.run();
-		}
+//		for (Train train : trainList) {
+//			Gdx.gl.glLineWidth(5);
+//			train.run();
+//		}
 		world.step(1/60f, 6, 2);
 	}
 

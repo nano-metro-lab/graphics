@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -38,7 +39,7 @@ public class Line {
             this.stationList.add(index, s);
         }
         if (this.stationList.size() < 2) return;
-        calculateTrack();
+        newCalculateTrack();
     }
 
     public void remove(Location location) {
@@ -87,6 +88,19 @@ public class Line {
 
     int k = 100;
     Vector2[] cachedPoints = new Vector2[k];
+
+    private void newCalculateTrack() {
+        Vector2[] controlPoints = new Vector2[this.stationList.size()];
+        for (int i = 0; i < this.stationList.size() ; i++) {
+            controlPoints[i] = this.stationList.get(i).location.getPosition();
+        }
+        Bezier<Vector2> path = new Bezier<>(controlPoints);
+        for (int i = 0; i < k; i++) {
+            cachedPoints[i] = new Vector2();
+            path.valueAt(cachedPoints[i], ((float)i)/((float)k-1));
+        }
+    }
+
     private void calculateTrack() {
         if (this.controlPoint == null) {
             Vector2[] controlPoints = new Vector2[this.stationList.size() + 2];
