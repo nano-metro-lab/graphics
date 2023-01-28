@@ -1,10 +1,7 @@
 package com.badlogic.drop;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -13,32 +10,32 @@ import java.util.List;
 
 public class Line {
     private final List<Station> stationList;
-    private final List<Section> sectionList;
+    private final List<Track> trackList;
 //    public Color lineColor;
     private static final World world = Drop.world;
 
     public Line() {
-        this.sectionList = new ArrayList<Section>(20);
+        this.trackList = new ArrayList<Track>(20);
         this.stationList = new ArrayList<Station>(21);
     }
 
     public void updateSections() {
         if (this.stationList == null) return;
-        for (Section i : this.sectionList) {
+        for (Track i : this.trackList) {
             i.generateBezier();
             i.generateSamples();
             i.generateSensors();
         }
     }
 
-    public Section getSection(Location locationA, Location locationB) {
+    public Track getSection(Location locationA, Location locationB) {
         List<Station> t = new ArrayList<Station>(2);
         for (Station j : this.stationList) {
             if (j.getLocation() == locationA || j.getLocation() == locationB) {
                 t.add(j);
             }
         }
-        for (Section i : this.sectionList) {
+        for (Track i : this.trackList) {
             if (i.hasStation(t.get(0)) && i.hasStation(t.get(1))) {
                 return i;
             }
@@ -52,7 +49,7 @@ public class Line {
 //        Gdx.gl.glLineWidth(25);
         if (stationList.size() < 2) return;
 
-        for (Section s : this.sectionList) {
+        for (Track s : this.trackList) {
             int k = s.getPathSamples().length;
             for (int i = 0; i < k - 1; i++) {
                 shape.begin(ShapeRenderer.ShapeType.Line);
@@ -73,56 +70,56 @@ public class Line {
             return;
         } else if (this.stationList.size() == 2) {
             Station startStation = this.stationList.get(this.stationList.size()-2);
-            this.sectionList.add(new Section(startStation, endStation));
+            this.trackList.add(new Track(startStation, endStation));
         } else {
             Station startStation = this.stationList.get(this.stationList.size()-2);
-            Section previousSection = null;
-            for (Section i : this.sectionList) {
+            Track previousTrack = null;
+            for (Track i : this.trackList) {
                 if (i.hasStation(startStation)) {
-                    previousSection = i;
+                    previousTrack = i;
                 }
             }
-            if (previousSection == null) System.out.println("Errrror");
-            this.sectionList.add(new Section(startStation, endStation, previousSection));
+            if (previousTrack == null) System.out.println("Errrror");
+            this.trackList.add(new Track(startStation, endStation, previousTrack));
         }
         this.updateSections();
     }
 
     public void removeTail() {
         Station station = this.stationList.get(this.stationList.size()-1);
-        Section section = null;
-        for (Section s : this.sectionList) {
+        Track track = null;
+        for (Track s : this.trackList) {
             if (s.hasStation(station)) {
-                section = s;
+                track = s;
             }
         }
-        if (section == null) System.out.println("errrr");
-        section.destroy();
+        if (track == null) System.out.println("errrr");
+        track.destroy();
 //        station.destory();
         this.stationList.remove(station);
-        this.sectionList.remove(section);
+        this.trackList.remove(track);
     }
 
     public void addHead(Location location) {
         if (this.stationList.size() >= 2) {
             Station startStation = this.stationList.get(0);
             Station endStation = new Station(location);
-            Section previousSection = null;
-            for (Section i : this.sectionList) {
+            Track previousTrack = null;
+            for (Track i : this.trackList) {
                 if (i.hasStation(startStation)) {
-                    previousSection = i;
+                    previousTrack = i;
                 }
             }
-            if (previousSection == null) System.out.println("Errrror");
-            this.sectionList.add(new Section(startStation, endStation, previousSection));
+            if (previousTrack == null) System.out.println("Errrror");
+            this.trackList.add(new Track(startStation, endStation, previousTrack));
         } else {
             System.out.println("should not happen");
         }
     }
-    public void addMiddle(Location location, Section existingSection) {
+    public void addMiddle(Location location, Track existingTrack) {
         Station middleStation = new Station(location);
-        Station stationA = existingSection.getStartStation();
-        Station stationB = existingSection.getEndStation();
+        Station stationA = existingTrack.getStartStation();
+        Station stationB = existingTrack.getEndStation();
         int index = this.stationList.indexOf(stationA) > this.stationList.indexOf(stationB) ?
                 this.stationList.indexOf(stationB) + 1 : this.stationList.indexOf(stationA) + 1;
         this.stationList.add(index, middleStation);
@@ -132,40 +129,40 @@ public class Line {
         Vector2 controlPointA = middleControlPoints[0];
         Vector2 controlPointB = middleControlPoints[1];
         if (stationA == this.stationList.get(0) || stationA == this.stationList.get(this.stationList.size()-1)) {
-            this.sectionList.add(new Section(middleStation, stationA, controlPointA));
+            this.trackList.add(new Track(middleStation, stationA, controlPointA));
         } else {
-            this.sectionList.add(new Section(stationA, middleStation,
-                    existingSection.getControlPoint(stationA), controlPointA));
+            this.trackList.add(new Track(stationA, middleStation,
+                    existingTrack.getControlPoint(stationA), controlPointA));
         }
 
         if (stationB == this.stationList.get(0) || stationB == this.stationList.get(this.stationList.size()-1)) {
-            this.sectionList.add(new Section(middleStation, stationB, controlPointB));
+            this.trackList.add(new Track(middleStation, stationB, controlPointB));
         } else {
-            this.sectionList.add(new Section(stationB, middleStation,
-                    existingSection.getControlPoint(stationB), controlPointB));
+            this.trackList.add(new Track(stationB, middleStation,
+                    existingTrack.getControlPoint(stationB), controlPointB));
         }
 
 //
 //        this.sectionList.add(new Section(stationB, middleStation,
 //                existingSection.getControlPoint(stationB), controlPointB));
-        existingSection.destroy();
-        this.sectionList.remove(existingSection);
+        existingTrack.destroy();
+        this.trackList.remove(existingTrack);
         this.updateSections();
     }
 
     public void removeMiddle(Station station) {
 
         List<Object> t = new ArrayList<>(4);
-        for (Section s : this.sectionList) {
+        for (Track s : this.trackList) {
             if (s.hasStation(station)) {
                 t.add(s.getOppositeStation(station));
                 t.add(s.getControlPoint(s.getOppositeStation(station)));
                 s.destroy();
-                this.sectionList.remove(s);
+                this.trackList.remove(s);
             }
         }
         this.stationList.remove(station);
-        this.sectionList.add(new Section(
+        this.trackList.add(new Track(
                 (Station)t.get(0), (Station)t.get(1), (Vector2)t.get(1), (Vector2)t.get(3)));
 
     }
@@ -177,7 +174,7 @@ public class Line {
         Vector2 controlPointA = vA.cpy().add(offsetA);
         Vector2 offsetB = vC.cpy().sub(vA);
         Vector2 controlPointB = vB.cpy().add(offsetB);
-        float controlDistance = Section.controlDistance;
+        float controlDistance = Track.controlDistance;
         float distance = controlDistance / (float)Math.hypot(vA.x - vB.x, vA.y - vB.y);
         controlPointA = vC.cpy().lerp(controlPointA, distance);
         controlPointB = vC.cpy().lerp(controlPointB, distance);

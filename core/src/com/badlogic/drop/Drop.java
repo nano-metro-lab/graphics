@@ -123,6 +123,7 @@ public class Drop extends ApplicationAdapter {
 		Location l6 = new Location(5, 9, Location.LocationType.CIRCLE);
 		Location l7 = new Location(32, 30, Location.LocationType.CIRCLE);
 		Location l8 = new Location(17, 17, Location.LocationType.CIRCLE);
+		Location l9 = new Location(29, 2, Location.LocationType.CIRCLE);
 
 
 		Line line1 = new Line();
@@ -130,6 +131,7 @@ public class Drop extends ApplicationAdapter {
 		line1.addTail(l3);
 		line1.addTail(l2);
 		line1.addTail(l4);
+		line1.addTail(l9);
 
 		this.lineList.add(line1);
 

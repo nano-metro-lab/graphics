@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Section {
+public class Track {
     static float controlDistance = 2.0f;
 
 
@@ -69,12 +69,12 @@ public class Section {
     }
 
 
-    public Section(Station startStation, Station endStation, Section previousSection) {
+    public Track(Station startStation, Station endStation, Track previousTrack) {
         this.startStation = startStation;
         this.endStation = endStation;
-        generateControlPoints(previousSection);
+        generateControlPoints(previousTrack);
     }
-    public Section(Station startStation, Station endStation, Vector2 p1, Vector2 p2) {
+    public Track(Station startStation, Station endStation, Vector2 p1, Vector2 p2) {
         this.startStation = startStation;
         this.endStation = endStation;
         this.startStationControlPoint = p1;
@@ -82,7 +82,7 @@ public class Section {
         this.startStationPoint = this.startStation.getPosition();
         this.endStationPoint = this.endStation.getPosition();
     }
-    public Section(Station startStation, Station endStation, Vector2 p1) {
+    public Track(Station startStation, Station endStation, Vector2 p1) {
         this.startStation = startStation;
         this.endStation = endStation;
 
@@ -95,7 +95,7 @@ public class Section {
         this.endStationControlPoint = this.endStationPoint.cpy().lerp(this.startStationPoint, distance);
 
     }
-    public Section(Station startStation, Station endStation) {
+    public Track(Station startStation, Station endStation) {
         this.startStation = startStation;
         this.endStation = endStation;
         generateControlPoints();
@@ -111,7 +111,7 @@ public class Section {
         this.startStationControlPoint = this.startStationPoint.cpy().lerp(this.endStationPoint, distance);
 
     }
-    public void generateControlPoints(Section previousSection) {
+    public void generateControlPoints(Track previousTrack) {
         this.startStationPoint = this.startStation.getPosition();
         this.endStationPoint = this.endStation.getPosition();
 
@@ -119,10 +119,10 @@ public class Section {
                 this.startStationPoint.y - this.endStationPoint.y);
         this.endStationControlPoint = this.endStationPoint.cpy().lerp(this.startStationPoint, distance);
 
-        if (this.startStation == previousSection.endStation) {
-            this.startStationControlPoint = previousSection.getEndStationOppositeControlPoints();
+        if (this.startStation == previousTrack.endStation) {
+            this.startStationControlPoint = previousTrack.getEndStationOppositeControlPoints();
         } else {
-            this.startStationControlPoint = previousSection.getStartStationOppositeControlPoints();
+            this.startStationControlPoint = previousTrack.getStartStationOppositeControlPoints();
         }
     }
 
