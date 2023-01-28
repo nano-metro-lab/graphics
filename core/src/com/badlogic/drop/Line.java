@@ -27,6 +27,7 @@ public class Line {
         for (Section i : this.sectionList) {
             i.generateBezier();
             i.generateSamples();
+            i.generateSensors();
         }
     }
 
@@ -46,9 +47,9 @@ public class Line {
     }
 
     public void draw(ShapeRenderer shape) {
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glLineWidth(25);
+//        Gdx.gl.glEnable(GL20.GL_BLEND);
+//        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+//        Gdx.gl.glLineWidth(25);
         if (stationList.size() < 2) return;
 
         for (Section s : this.sectionList) {
@@ -58,13 +59,11 @@ public class Line {
                 shape.setColor(Color.BLUE);
                 shape.line(s.getPathSamples()[i], s.getPathSamples()[i+1]);
                 shape.end();
-
             }
 
+
         }
-
-
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+//        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     public void addTail(Location location) {
@@ -86,7 +85,7 @@ public class Line {
             if (previousSection == null) System.out.println("Errrror");
             this.sectionList.add(new Section(startStation, endStation, previousSection));
         }
-        updateSections();
+        this.updateSections();
     }
 
     public void removeTail() {
@@ -149,8 +148,9 @@ public class Line {
 //
 //        this.sectionList.add(new Section(stationB, middleStation,
 //                existingSection.getControlPoint(stationB), controlPointB));
+        existingSection.destroy();
         this.sectionList.remove(existingSection);
-        updateSections();
+        this.updateSections();
     }
 
     public void removeMiddle(Station station) {

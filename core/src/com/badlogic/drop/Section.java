@@ -3,8 +3,11 @@ package com.badlogic.drop;
 import com.badlogic.gdx.math.Bezier;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Section {
@@ -21,7 +24,6 @@ public class Section {
     private Vector2 startStationPoint;
     private Vector2 endStationPoint;
 
-    private List<Body> sensorList;
     private Bezier<Vector2> bezierPath;
 
     public Vector2[] getPathSamples() {
@@ -29,7 +31,8 @@ public class Section {
     }
 
     private Vector2 pathSamples[];
-
+    private int sampleRate = 0;
+    private List<Body> sensorList = new ArrayList<Body>(1000);
     private static final World world = Drop.world;
 
     public Vector2 getControlPoint(Station station) {
@@ -139,16 +142,27 @@ public class Section {
         return this.bezierPath.approxLength(100);
     }
     public void generateSamples() {
-        int k = (int) (this.getPathLength() / 0.05f);
-        this.pathSamples = new Vector2[k];
-        for (int i = 0; i < k; i++) {
+        this.sampleRate = (int) (this.getPathLength() / 0.5f); // Todo need tune
+        this.pathSamples = new Vector2[this.sampleRate];
+        for (int i = 0; i < this.sampleRate; i++) {
             this.pathSamples[i] = new Vector2();
-            this.bezierPath.valueAt(this.pathSamples[i], ((float)i)/((float)k-1));
+            this.bezierPath.valueAt(this.pathSamples[i], ((float)i)/((float)this.sampleRate-1));
         }
     }
 
 
-    private void generateSensors() {
+    public void generateSensors() {
+        BodyDef sensorBodyDef = new BodyDef();
+        sensorBodyDef.type = BodyDef.BodyType.StaticBody;
+        CircleShape sensorShape = new CircleShape();
+        sensorShape.setRadius(0.5f);
+        for (Vector2 v : this.pathSamples) {
+            Body sensorBody = world.createBody(sensorBodyDef);
+            sensorBody.createFixture(sensorShape, 0.0f);
+            sensorBody.setTransform(v.x, v.y, 0);
+            this.sensorList.add(sensorBody);
+        }
+        sensorShape.dispose();
         // todo
     }
 
@@ -162,7 +176,7 @@ public class Section {
     }
 
     public void destroy() {
-
+        this.destroySensors();
     }
 
 
