@@ -14,57 +14,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Line {
-    static World world;
     public List<Station> stationList;
-
-    private List<Object> graph;
-    public Color lineColor;
+    private List<Section> sectionlist;
+//    public Color lineColor;
     public CatmullRomSpline<Vector2> track;
     private Vector2 controlPoint;
+    private static final World world = Drop.world;
 
-    public Line(Location location, Color lineColor) { // Todo take args?
-        this.lineColor = lineColor;
-        this.world = Drop.world;
-        Station s = new Station(location);
-        this.graph.add(s);
+    public Line() {
+
     }
-    private float controlDistance = 1f;
+
+
     public void addTail(Location location) {
-        if (this.graph.size() == 1) {
-            Station station = new Station(location);
-            Station tailStation = (Station) this.graph.get(this.graph.size()-1);
-            Vector2 p0 = tailStation.getPosition();
-            Vector2 p3 = station.getPosition();
-            float distance = controlDistance / (float)Math.hypot(p0.x - p3.x, p0.y - p3.y);
-            Vector2 p2 = p3.cpy().lerp(p0, distance);
-            Vector2 p1 = p0.cpy().lerp(p3, distance);
-            Section section = new Section(p0, p1, p2, p3);
-            this.graph.add(section);
-            this.graph.add(station);
+        Station endStation = new Station(location);
+        this.stationList.add(endStation);
+        if (this.stationList.size() == 1) {
+            return;
+        } else if (this.stationList.size() == 2) {
+            Station startStation = this.stationList.get(this.stationList.size()-2);
+            this.sectionlist.add(new Section(startStation, endStation));
         } else {
-            Station tailStation = (Station) this.graph.get(this.graph.size()-1);
-            Section tailSection = (Section) this.graph.get(this.graph.size()-2);
-            Station station = new Station(location);
-            Vector2 p0 = tailStation.getPosition();
-            Vector2 p1 = tailSection.getP2Mirror();
-            Vector2 p3 = station.getPosition();
-            float distance = controlDistance / (float)Math.hypot(p0.x - p3.x, p0.y - p3.y);
-            Vector2 p2 = p3.cpy().lerp(p0, distance);
-            Section section = new Section(p0, p1, p2, p3);
-            this.graph.add(section);
-            this.graph.add(station);
+            Station startStation = this.stationList.get(this.stationList.size()-2);
+            Section previousSection = null;
+            for (Section i : this.sectionlist) {
+                if (i.getStartStation() == startStation || i.getEndStation() == startStation) {
+                    previousSection = i;
+                }
+            }
+            if (previousSection == null) System.out.println("Errrror");
+            this.sectionlist.add(new Section(startStation, endStation, previousSection));
         }
     }
 
-    public void draw() {
-        for (Object obj : this.graph) {
-            if (obj instanceof Station) {
-                (Station)obj.draw();
-            } else {
-                (Section)obj.draw();
+    public void addHead(Location location) {
+        if (this.stationList.size() >= 2) {
+            Station startStation = this.stationList.get(0);
+            Station endStation = new Station(location);
+            Section previousSection = null;
+            for (Section i : this.sectionlist) {
+                if (i.getStartStation() == startStation || i.getEndStation() == startStation) {
+                    previousSection = i;
+                }
             }
+            if (previousSection == null) System.out.println("Errrror");
+            this.sectionlist.add(new Section(startStation, endStation, previousSection));
+        } else {
+            System.out.println("should not happen");
         }
     }
+    public void addMiddle(Location location, Section existingSection) {
+        Station middleStation = new Station(location);
+        Station stationA = existingSection.getStartStation();
+        Station stationB = existingSection.getEndStation();
+        int index = this.stationList.indexOf(stationA) > this.stationList.indexOf(stationB) ?
+                this.stationList.indexOf(stationB) : this.stationList.indexOf(stationA);
+        this.stationList.add(index, middleStation);
+
+
+    }
+
 
 
 }
