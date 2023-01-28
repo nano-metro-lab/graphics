@@ -11,24 +11,24 @@ import java.util.List;
 public class Line {
     private final List<Station> stationList;
     private final List<Track> trackList;
+    private final List<TrackPreview> trackPreviewList;
 //    public Color lineColor;
     private static final World world = Drop.world;
 
     public Line() {
         this.trackList = new ArrayList<Track>(20);
+        this.trackPreviewList = new ArrayList<TrackPreview>(5);
         this.stationList = new ArrayList<Station>(21);
     }
 
-    public void updateSections() {
+    public void updateTracks() {
         if (this.stationList == null) return;
         for (Track i : this.trackList) {
-            i.generateBezier();
-            i.generateSamples();
-            i.generateSensors();
+            i.update();
         }
     }
 
-    public Track getSection(Location locationA, Location locationB) {
+    public Track getTrack(Location locationA, Location locationB) {
         List<Station> t = new ArrayList<Station>(2);
         for (Station j : this.stationList) {
             if (j.getLocation() == locationA || j.getLocation() == locationB) {
@@ -82,7 +82,7 @@ public class Line {
             if (previousTrack == null) System.out.println("Errrror");
             this.trackList.add(new Track(startStation, endStation, previousTrack));
         }
-        this.updateSections();
+        this.updateTracks();
     }
 
     public void removeTail() {
@@ -143,11 +143,9 @@ public class Line {
         }
 
 //
-//        this.sectionList.add(new Section(stationB, middleStation,
-//                existingSection.getControlPoint(stationB), controlPointB));
         existingTrack.destroy();
         this.trackList.remove(existingTrack);
-        this.updateSections();
+        this.updateTracks();
     }
 
     public void removeMiddle(Station station) {

@@ -140,8 +140,8 @@ public class Drop extends ApplicationAdapter {
 //		line2.addTail(l1);
 		line2.addTail(l2);
 		line2.addTail(l7);
-		line2.addMiddle(l1, line2.getSection(l6, l2));
-		line2.addMiddle(l8, line2.getSection(l1, l2));
+		line2.addMiddle(l1, line2.getTrack(l6, l2));
+		line2.addMiddle(l8, line2.getTrack(l1, l2));
 
 
 		this.lineList.add(line2);

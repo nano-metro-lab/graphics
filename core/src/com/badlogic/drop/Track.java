@@ -12,11 +12,7 @@ import java.util.List;
 
 public class Track {
     static float controlDistance = 2.0f;
-
-
     private Station startStation;
-
-
     private Vector2 startStationControlPoint;
     private Station endStation;
     private Vector2 endStationControlPoint;
@@ -128,20 +124,18 @@ public class Track {
 
     // self rendering related part
 
-//    private Vector2[] getControlPointsArray() {
-//        return new Vector2[] {this.startStationPoint, this.startStationControlPoint,
-//                this.endStationControlPoint, this.endStationPoint};
-//    }
+    public void update() {
+        this.generateBezier();
+        this.generateSamples();
+        this.generateSensors();
+    }
 
-    public void generateBezier() { // Todo maybe not needed
+    void generateBezier() { // Todo maybe not needed
         this.bezierPath = new Bezier<>(this.startStationPoint, this.startStationControlPoint,
                 this.endStationControlPoint, this.endStationPoint);
     }
 
-    private float getPathLength() {
-        return this.bezierPath.approxLength(100);
-    }
-    public void generateSamples() {
+    void generateSamples() {
         this.sampleRate = (int) (this.getPathLength() / 0.5f); // Todo need tune
         this.pathSamples = new Vector2[this.sampleRate];
         for (int i = 0; i < this.sampleRate; i++) {
@@ -150,8 +144,7 @@ public class Track {
         }
     }
 
-
-    public void generateSensors() {
+    void generateSensors() {
         BodyDef sensorBodyDef = new BodyDef();
         sensorBodyDef.type = BodyDef.BodyType.StaticBody;
         CircleShape sensorShape = new CircleShape();
@@ -166,7 +159,8 @@ public class Track {
         // todo
     }
 
-    public void destroySensors() {
+    public void destroy() {
+        // destroy sensors
         if (this.sensorList != null) {
             for (Body i : this.sensorList) {
                 world.destroyBody(i);
@@ -175,19 +169,17 @@ public class Track {
         }
     }
 
-    public void destroy() {
-        this.destroySensors();
+
+
+
+    private float getPathLength() {
+        return this.bezierPath.approxLength(100);
     }
 
-
-
-
-
-
-    public Vector2 getStartStationOppositeControlPoints() {
+    Vector2 getStartStationOppositeControlPoints() {
         return (this.startStationPoint.cpy().sub(this.startStationControlPoint).add(this.startStationPoint));
     }
-    public Vector2 getEndStationOppositeControlPoints() {
+    Vector2 getEndStationOppositeControlPoints() {
         return (this.endStationPoint.cpy().sub(this.endStationControlPoint).add(this.endStationPoint));
     }
 
