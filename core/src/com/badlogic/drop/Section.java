@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.List;
 
 public class Section {
-    private static float controlDistance = 1.0f;
+    static float controlDistance = 1.0f;
 
 
     private Station startStation;
@@ -26,12 +26,38 @@ public class Section {
     private Vector2 pathSamples[];
 
     private static final World world = Drop.world;
-    public Vector2 getStartStationControlPoint() {
-        return startStationControlPoint;
+
+    public Vector2 getControlPoint(Station station) {
+        if (this.startStation == station) {
+            return this.startStationControlPoint;
+        } else {
+            return this.endStationControlPoint;
+        }
     }
 
-    public Vector2 getEndStationControlPoint() {
-        return endStationControlPoint;
+    public Vector2 getPoint(Station station) {
+        if (this.startStation == station) {
+            return this.startStationPoint;
+        } else {
+            return this.endStationPoint;
+        }
+    }
+
+    public boolean hasStation(Station station) {
+        if (this.startStation == station || this.endStation == station) {
+            return true;
+        } else return false;
+    }
+
+    public Station getOppositeStation (Station station) {
+        if (this.startStation == station) {
+            return this.endStation;
+        }
+        else if (this.endStation == station) {
+            return this.startStation;
+        } else {
+            return null;
+        }
     }
 
     public Vector2 getStartStationPoint() {
@@ -55,6 +81,15 @@ public class Section {
         this.startStation = startStation;
         this.endStation = endStation;
         generateControlPoints(previousSection);
+    }
+
+    public Section(Station startStation, Station endStation, Vector2 p1, Vector2 p2) {
+        this.startStation = startStation;
+        this.endStation = endStation;
+        this.startStationControlPoint = p1;
+        this.endStationControlPoint = p2;
+        this.startStationPoint = this.startStation.getPosition();
+        this.endStationPoint = this.endStation.getPosition();
     }
     public Section(Station startStation, Station endStation) {
         this.startStation = startStation;
@@ -88,10 +123,13 @@ public class Section {
     }
 
 
+
+
     // self rendering related part
 
     private Vector2[] getControlPointsArray() {
-        return new Vector2[] {this.startStationPoint, this.startStationControlPoint, this.endStationControlPoint, this.endStationPoint};
+        return new Vector2[] {this.startStationPoint, this.startStationControlPoint,
+                this.endStationControlPoint, this.endStationPoint};
     }
 
     public void generateBezier(boolean reverse) { // Todo maybe not needed
@@ -123,6 +161,10 @@ public class Section {
             }
             this.sensorList = null;
         }
+    }
+
+    public void destroy() {
+
     }
 
 

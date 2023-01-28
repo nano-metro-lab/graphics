@@ -70,8 +70,47 @@ public class Line {
         int index = this.stationList.indexOf(stationA) > this.stationList.indexOf(stationB) ?
                 this.stationList.indexOf(stationB) : this.stationList.indexOf(stationA);
         this.stationList.add(index, middleStation);
+        // gen control points
+        Vector2[] middleControlPoints = this.getMiddleControlPoints(stationA.getPosition(),
+                stationB.getPosition(), middleStation.getPosition());
+        Vector2 controlPointA = middleControlPoints[0];
+        Vector2 controlPointB = middleControlPoints[1];
+        this.sectionlist.add(new Section(stationA, middleStation,
+                existingSection.getControlPoint(stationA), controlPointA));
+        this.sectionlist.add(new Section(stationB, middleStation,
+                existingSection.getControlPoint(stationB), controlPointB));
+        this.sectionlist.remove(existingSection);
+    }
+
+    public void removeMiddle(Station station) {
+
+        List<Object> t = new ArrayList<>(4);
+        for (Section s : this.sectionlist) {
+            if (s.hasStation(station)) {
+                t.add(s.getOppositeStation(station));
+                t.add(s.getControlPoint(s.getOppositeStation(station)));
+                s.destroy();
+                this.sectionlist.remove(s);
+            }
+        }
+        this.stationList.remove(station);
+        this.sectionlist.add(new Section(
+                (Station)t.get(0), (Station)t.get(1), (Vector2)t.get(1), (Vector2)t.get(3)));
+
+    }
 
 
+
+    private Vector2[] getMiddleControlPoints(Vector2 vA, Vector2 vB, Vector2 vC) {
+        Vector2 offsetA = vC.cpy().sub(vB);
+        Vector2 controlPointA = vA.cpy().add(offsetA);
+        Vector2 offsetB = vC.cpy().sub(vA);
+        Vector2 controlPointB = vB.cpy().add(offsetB);
+        float controlDistance = Section.controlDistance;
+        float distance = controlDistance / (float)Math.hypot(vA.x - vB.x, vA.y - vB.y);
+        controlPointA = vC.cpy().lerp(controlPointA, distance);
+        controlPointB = vC.cpy().lerp(controlPointB, distance);
+        return new Vector2[] {controlPointA, controlPointB};
     }
 
 
