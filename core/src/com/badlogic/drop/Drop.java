@@ -121,11 +121,25 @@ public class Drop extends ApplicationAdapter {
 		Location l4 = new Location(29, 9, Location.LocationType.CIRCLE);
 		Location l5 = new Location(12, 35, Location.LocationType.CIRCLE);
 		Location l6 = new Location(5, 9, Location.LocationType.CIRCLE);
+		Location l7 = new Location(32, 30, Location.LocationType.CIRCLE);
 
 		Line line1 = new Line();
-		line1.addTail(l1);
-		line1.addTail(l2);
+		line1.addTail(l5);
 		line1.addTail(l3);
+		line1.addTail(l2);
+		line1.addTail(l4);
+
+		this.lineList.add(line1);
+
+		Line line2 = new Line();
+		line2.addTail(l6);
+//		line2.addTail(l1);
+		line2.addTail(l2);
+		line2.addTail(l7);
+		line2.addMiddle(l1, line2.getSection(l6, l2));
+
+
+		this.lineList.add(line2);
 
 
 
@@ -154,12 +168,11 @@ public class Drop extends ApplicationAdapter {
 		}
 
 		// libgdx
-		Gdx.gl.glLineWidth(4);
 		debugRenderer.render(world, camera.combined);
-		for (Train train : trainList) {
-			Gdx.gl.glLineWidth(5);
-			train.run();
-		}
+//		for (Train train : trainList) {
+//			Gdx.gl.glLineWidth(5);
+//			train.run();
+//		}
 		world.step(1/60f, 6, 2);
 	}
 
