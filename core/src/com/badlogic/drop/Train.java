@@ -56,26 +56,36 @@ public class Train {
         this.currentSectionFinish = false;
     }
 
+    public void run() {
+        this.run(this.line.getFirstSection(), 0, false);
+    }
+
     public void run(Section s, float p, boolean d) {
         if (this.currentSection == null) {
             this.currentSection = s;
-            this.resetTrain();
-        } else if (this.currentSectionFinish) {
-            this.currentSection = this.line.getNextSection(this.currentSection);
-            this.resetTrain();
-        } else {
-            this.runSection(this.currentSection);
         }
+
+        if (this.currentSectionFinish) {
+            this.resetTrain();
+            if ((!this.currentDirection && this.line.getNextSection(this.currentSection) == null) || (this.currentDirection && this.line.getPreviousSection(this.currentSection) == null)) {
+                this.currentDirection = !this.currentDirection;
+            } else {
+                this.currentSection = this.currentDirection?
+                        this.line.getPreviousSection(this.currentSection) : this.line.getNextSection(this.currentSection);
+            }
+
+        }
+        this.runSection(this.currentSection);
     }
 
     public void runSection(Section s) {
         float sectionTimeLimit = this.timeLimit * s.getLength();
-        if (runTime <= sectionTimeLimit) {
+        if (runTime < sectionTimeLimit) { // tuned
             runTime += Gdx.graphics.getDeltaTime();
             float f = runTime / sectionTimeLimit;
             Vector2 bodyPosition = this.trainBody.getWorldCenter();
             Bezier<Vector2> track = s.getBezierPath();
-            if (s.reverse) {
+            if (s.reverse ^ this.currentDirection) {
                 track.valueAt(trainTargetPosition, 1 - f);
             } else {
                 track.valueAt(trainTargetPosition, f);

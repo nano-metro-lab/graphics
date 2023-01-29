@@ -19,6 +19,12 @@ public class Line {
         this.stationList = new ArrayList<Station>(21);
     }
 
+    public Section getFirstSection() {
+        if (this.sectionList == null) {
+            return null;
+        } return this.sectionList.get(0);
+    }
+
     public Section getNextSection(Section currentSection) {
         if (this.stationList.indexOf(currentSection.getStartStation()) < this.stationList.indexOf(currentSection.getEndStation())) {
             Station i = currentSection.getEndStation();
@@ -34,6 +40,26 @@ public class Line {
                 return null;
             } else {
                 Station j = this.stationList.get(this.stationList.indexOf(i) + 1);
+                return this.getSection(i.getLocation(), j.getLocation());
+            }
+        }
+    }
+
+    public Section getPreviousSection(Section currentSection) {
+        if (this.stationList.indexOf(currentSection.getStartStation()) < this.stationList.indexOf(currentSection.getEndStation())) {
+            Station i = currentSection.getStartStation();
+            if (this.stationList.indexOf(i) == 0 ) {
+                return null;
+            } else {
+                Station j = this.stationList.get(this.stationList.indexOf(i) - 1);
+                return this.getSection(i.getLocation(), j.getLocation());
+            }
+        } else {
+            Station i = currentSection.getEndStation();
+            if (this.stationList.indexOf(i) == 0 ) {
+                return null;
+            } else {
+                Station j = this.stationList.get(this.stationList.indexOf(i) - 1);
                 return this.getSection(i.getLocation(), j.getLocation());
             }
         }

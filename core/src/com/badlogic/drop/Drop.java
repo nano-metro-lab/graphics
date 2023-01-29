@@ -37,7 +37,7 @@ public class Drop extends ApplicationAdapter {
 	static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	private Line testLine;
 	private List<Line> lineList = new ArrayList<Line>(5);
-//	private List<Train> trainList = new ArrayList<Train>(5);
+	private List<Train> trainList = new ArrayList<Train>(5);
 
 	public Drop() {
 	}
@@ -133,12 +133,9 @@ public class Drop extends ApplicationAdapter {
 		line1.addTail(l4);
 		line1.addTail(l9);
 
-
-
 		this.lineList.add(line1);
-//		Train t1 = new Train(line1);
-//		this.testTrain = t1;
-//		this.testSection = line1.getSection(l3, l5);
+		this.trainList.add(new Train(line1));
+
 
 		Line line2 = new Line();
 		line2.addTail(l6);
@@ -148,12 +145,9 @@ public class Drop extends ApplicationAdapter {
 		line2.addMiddle(l1, line2.getSection(l6, l2));
 		line2.addMiddle(l8, line2.getSection(l1, l2));
 
-		Train t2 = new Train(line2);
-		this.testTrain = t2;
-		this.testSection = line2.getSection(l6, l1);
-
 
 		this.lineList.add(line2);
+		this.trainList.add(new Train(line2));
 
 		shape.setProjectionMatrix(camera.combined);
 
@@ -181,11 +175,10 @@ public class Drop extends ApplicationAdapter {
 
 		// libgdx
 		debugRenderer.render(world, camera.combined);
-		testTrain.run(testSection, 0, false);
-//		for (Train train : trainList) {
+		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
-//			train.run();
-//		}
+			train.run();
+		}
 		world.step(1/60f, 6, 2);
 	}
 
