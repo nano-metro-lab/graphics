@@ -2,6 +2,7 @@ package com.badlogic.drop;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.FloatCounter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -11,21 +12,55 @@ import java.util.List;
 public class Line {
     private final List<Station> stationList;
     private final List<Track> trackList;
-    private final List<TrackPreview> trackPreviewList;
+//    private final List<TrackPreview> trackPreviewList;
 //    public Color lineColor;
     private static final World world = Drop.world;
 
+//    public List<Vector2> getFullTrackSamplesList() {
+//        return fullTrackSamplesList;
+//    }
+
+    private List<Vector2> fullTrackSamplesList;
+
     public Line() {
         this.trackList = new ArrayList<Track>(20);
-        this.trackPreviewList = new ArrayList<TrackPreview>(5);
+//        this.trackPreviewList = new ArrayList<TrackPreview>(5);
         this.stationList = new ArrayList<Station>(21);
+//        this.fullTrackSamplesList = new ArrayList<>(1000);
     }
 
+
     public void updateTracks() {
-        if (this.stationList == null) return;
+        if (this.trackList.isEmpty()) return;
         for (Track i : this.trackList) {
             i.update();
         }
+
+//        // clean up
+//        this.fullTrackSamplesList.removeAll(this.fullTrackSamplesList);
+//        // Todo, seems not efficient
+//        Track[] tmp = new Track[this.trackList.size()];
+        boolean[] reverse = new boolean[this.trackList.size()];
+        for (Track i : this.trackList) {
+            if (this.stationList.indexOf(i.getStartStation()) < this.stationList.indexOf(i.getEndStation())) {
+//                tmp[this.stationList.indexOf(i.getStartStation())] = i;
+                reverse[this.stationList.indexOf(i.getStartStation())] = false;
+            } else {
+//                tmp[this.stationList.indexOf(i.getEndStation())] = i;
+                reverse[this.stationList.indexOf(i.getEndStation())] = true;
+            }
+        }
+//        for (int i = 0; i < this.trackList.size(); i++) {
+//            if (reverse[i]) {
+//                for (int j = tmp[i].getPathSamples().length - 1; j >= 0; j--) {
+//                    this.fullTrackSamplesList.add(tmp[i].getPathSamples()[j]);
+//                }
+//            } else {
+//                for (Vector2 sample : tmp[i].getPathSamples()) {
+//                    this.fullTrackSamplesList.add(sample);
+//                }
+//            }
+//        }
     }
 
     public Track getTrack(Location locationA, Location locationB) {
@@ -64,8 +99,12 @@ public class Line {
     }
 
     public void addTail(Location location) {
+
         Station endStation = new Station(location);
-        this.stationList.add(endStation);
+        if (location.getType() != Location.LocationType.PREVIEW) {
+            this.stationList.add(endStation);
+        }
+
         if (this.stationList.size() == 1) {
             return;
         } else if (this.stationList.size() == 2) {

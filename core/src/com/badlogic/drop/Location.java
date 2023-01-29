@@ -5,9 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 public class Location {
 
     public enum LocationType {
-        CIRCLE, TRIANGLE, SQUARE
+        CIRCLE, TRIANGLE, SQUARE, PREVIEW
     }
     private Vector2 position;
+
+    public LocationType getType() {
+        return type;
+    }
+
     private LocationType type;
 
     public Location(float x, float y, LocationType type) {

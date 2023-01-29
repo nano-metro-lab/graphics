@@ -37,7 +37,7 @@ public class Drop extends ApplicationAdapter {
 	static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	private Line testLine;
 	private List<Line> lineList = new ArrayList<Line>(5);
-	private List<Train> trainList = new ArrayList<Train>(5);
+//	private List<Train> trainList = new ArrayList<Train>(5);
 
 	public Drop() {
 	}
@@ -133,7 +133,11 @@ public class Drop extends ApplicationAdapter {
 		line1.addTail(l4);
 		line1.addTail(l9);
 
+		Train t1 = new Train(line1);
+		t1.run();
+
 		this.lineList.add(line1);
+
 
 		Line line2 = new Line();
 		line2.addTail(l6);
