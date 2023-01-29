@@ -33,7 +33,7 @@ public class Section {
 
     private Vector2 pathSamples[];
     private int sampleRate = 0;
-    private List<Body> sensorList = new ArrayList<Body>(1000);
+    private List<Sensor> sensorList = new ArrayList<>(1000);
     private static final World world = Drop.world;
 
     public Vector2 getControlPoint(Station station) {
@@ -150,25 +150,16 @@ public class Section {
     }
 
     void generateSensors() {
-        BodyDef sensorBodyDef = new BodyDef();
-        sensorBodyDef.type = BodyDef.BodyType.StaticBody;
-        CircleShape sensorShape = new CircleShape();
-        sensorShape.setRadius(0.5f);
         for (Vector2 v : this.pathSamples) {
-            Body sensorBody = world.createBody(sensorBodyDef);
-            sensorBody.createFixture(sensorShape, 0.0f);
-            sensorBody.setTransform(v.x, v.y, 0);
-            this.sensorList.add(sensorBody);
+            this.sensorList.add(new Sensor(v));
         }
-        sensorShape.dispose();
-        // todo
     }
 
     public void destroy() {
         // destroy sensors
         if (this.sensorList != null) {
-            for (Body i : this.sensorList) {
-                world.destroyBody(i);
+            for (Sensor i : this.sensorList) {
+                i.destroy();
             }
             this.sensorList = null;
         }

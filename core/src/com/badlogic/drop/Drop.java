@@ -29,7 +29,7 @@ import java.util.List;
 public class Drop extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
-	private OrthographicCamera camera;
+	static OrthographicCamera camera;
 	private Viewport viewport;
 	private Box2DDebugRenderer debugRenderer;
 	private Body MouseBox;
