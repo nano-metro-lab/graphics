@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Section {
     public boolean reverse = false;
-    static float controlDistance = 2.0f;
+    static float controlDistance = 3.0f;
     private Station startStation;
     private Vector2 startStationControlPoint;
     private Station endStation;
