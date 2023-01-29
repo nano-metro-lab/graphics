@@ -133,31 +133,30 @@ public class Drop extends ApplicationAdapter {
 		line1.addTail(l4);
 		line1.addTail(l9);
 
-		Train t1 = new Train(line1);
-		t1.run();
+
 
 		this.lineList.add(line1);
-
+		Train t1 = new Train(line1);
+		this.testTrain = t1;
+		this.testSection = line1.getSection(l3, l5);
 
 		Line line2 = new Line();
 		line2.addTail(l6);
 //		line2.addTail(l1);
 		line2.addTail(l2);
 		line2.addTail(l7);
-		line2.addMiddle(l1, line2.getTrack(l6, l2));
-		line2.addMiddle(l8, line2.getTrack(l1, l2));
+		line2.addMiddle(l1, line2.getSection(l6, l2));
+		line2.addMiddle(l8, line2.getSection(l1, l2));
 
 
 		this.lineList.add(line2);
-
-
 
 		shape.setProjectionMatrix(camera.combined);
 
 	}
 
 	private Train testTrain;
-
+	private Section testSection;
 
 	@Override
 	public void render() {
@@ -178,6 +177,7 @@ public class Drop extends ApplicationAdapter {
 
 		// libgdx
 		debugRenderer.render(world, camera.combined);
+		testTrain.runSection(testSection);
 //		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
 //			train.run();

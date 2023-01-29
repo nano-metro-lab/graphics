@@ -10,7 +10,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Track {
+public class Section {
+    public boolean reverse = false;
     static float controlDistance = 2.0f;
     private Station startStation;
     private Vector2 startStationControlPoint;
@@ -19,6 +20,10 @@ public class Track {
 
     private Vector2 startStationPoint;
     private Vector2 endStationPoint;
+
+    public Bezier<Vector2> getBezierPath() {
+        return bezierPath;
+    }
 
     private Bezier<Vector2> bezierPath;
 
@@ -65,12 +70,12 @@ public class Track {
     }
 
 
-    public Track(Station startStation, Station endStation, Track previousTrack) {
+    public Section(Station startStation, Station endStation, Section previousSection) {
         this.startStation = startStation;
         this.endStation = endStation;
-        generateControlPoints(previousTrack);
+        generateControlPoints(previousSection);
     }
-    public Track(Station startStation, Station endStation, Vector2 p1, Vector2 p2) {
+    public Section(Station startStation, Station endStation, Vector2 p1, Vector2 p2) {
         this.startStation = startStation;
         this.endStation = endStation;
         this.startStationControlPoint = p1;
@@ -78,7 +83,7 @@ public class Track {
         this.startStationPoint = this.startStation.getPosition();
         this.endStationPoint = this.endStation.getPosition();
     }
-    public Track(Station startStation, Station endStation, Vector2 p1) {
+    public Section(Station startStation, Station endStation, Vector2 p1) {
         this.startStation = startStation;
         this.endStation = endStation;
 
@@ -91,7 +96,7 @@ public class Track {
         this.endStationControlPoint = this.endStationPoint.cpy().lerp(this.startStationPoint, distance);
 
     }
-    public Track(Station startStation, Station endStation) {
+    public Section(Station startStation, Station endStation) {
         this.startStation = startStation;
         this.endStation = endStation;
         generateControlPoints();
@@ -107,7 +112,7 @@ public class Track {
         this.startStationControlPoint = this.startStationPoint.cpy().lerp(this.endStationPoint, distance);
 
     }
-    public void generateControlPoints(Track previousTrack) {
+    public void generateControlPoints(Section previousSection) {
         this.startStationPoint = this.startStation.getPosition();
         this.endStationPoint = this.endStation.getPosition();
 
@@ -115,10 +120,10 @@ public class Track {
                 this.startStationPoint.y - this.endStationPoint.y);
         this.endStationControlPoint = this.endStationPoint.cpy().lerp(this.startStationPoint, distance);
 
-        if (this.startStation == previousTrack.endStation) {
-            this.startStationControlPoint = previousTrack.getEndStationOppositeControlPoints();
+        if (this.startStation == previousSection.endStation) {
+            this.startStationControlPoint = previousSection.getEndStationOppositeControlPoints();
         } else {
-            this.startStationControlPoint = previousTrack.getStartStationOppositeControlPoints();
+            this.startStationControlPoint = previousSection.getStartStationOppositeControlPoints();
         }
     }
 
@@ -136,7 +141,7 @@ public class Track {
     }
 
     void generateSamples() {
-        this.sampleRate = (int) (this.getPathLength() / 0.5f); // Todo need tune
+        this.sampleRate = (int) (this.getLength() / 0.5f); // Todo need tune
         this.pathSamples = new Vector2[this.sampleRate];
         for (int i = 0; i < this.sampleRate; i++) {
             this.pathSamples[i] = new Vector2();
@@ -172,7 +177,7 @@ public class Track {
 
 
 
-    private float getPathLength() {
+    public float getLength() {
         return this.bezierPath.approxLength(100);
     }
 
