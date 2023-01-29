@@ -136,9 +136,9 @@ public class Drop extends ApplicationAdapter {
 
 
 		this.lineList.add(line1);
-		Train t1 = new Train(line1);
-		this.testTrain = t1;
-		this.testSection = line1.getSection(l3, l5);
+//		Train t1 = new Train(line1);
+//		this.testTrain = t1;
+//		this.testSection = line1.getSection(l3, l5);
 
 		Line line2 = new Line();
 		line2.addTail(l6);
@@ -147,6 +147,10 @@ public class Drop extends ApplicationAdapter {
 		line2.addTail(l7);
 		line2.addMiddle(l1, line2.getSection(l6, l2));
 		line2.addMiddle(l8, line2.getSection(l1, l2));
+
+		Train t2 = new Train(line2);
+		this.testTrain = t2;
+		this.testSection = line2.getSection(l6, l1);
 
 
 		this.lineList.add(line2);
@@ -177,7 +181,7 @@ public class Drop extends ApplicationAdapter {
 
 		// libgdx
 		debugRenderer.render(world, camera.combined);
-		testTrain.runSection(testSection);
+		testTrain.run(testSection, 0, false);
 //		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
 //			train.run();
