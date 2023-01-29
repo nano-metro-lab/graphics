@@ -237,6 +237,10 @@ public class Line {
         return null;
     }
 
+    public boolean hasSection(Section s) {
+        return this.sectionList.contains(s);
+    }
+
 
 
     private Vector2[] getMiddleControlPoints(Vector2 vA, Vector2 vB, Vector2 vC) {

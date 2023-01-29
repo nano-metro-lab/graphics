@@ -151,7 +151,7 @@ public class Section {
 
     void generateSensors() {
         for (Vector2 v : this.pathSamples) {
-            this.sensorList.add(new Sensor(v));
+            this.sensorList.add(new Sensor(this, v));
         }
     }
 

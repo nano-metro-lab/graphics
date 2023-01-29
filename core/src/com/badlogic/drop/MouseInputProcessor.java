@@ -40,33 +40,54 @@ public class MouseInputProcessor implements InputProcessor {
 
     public boolean touchDown (int x, int y, int pointer, int button) {
         // check mouse box collision
-//        Vector3 mousePosition = new Vector3(x, y, 0);
-//        Drop.camera.unproject(mousePosition);
-//
-//        final List<Fixture> fixtureList = new ArrayList<>(10);
-//        Drop.world.QueryAABB(new QueryCallback() {
-//            @Override
-//            public boolean reportFixture(Fixture fixture) {
-////                System.out.println(fixture);
-//                fixtureList.add(fixture);
-////                Section s = (Section) fixture.getBody().getUserData();
-////                System.out.println(s);
-//                return true;
-//            }
-//        }, mousePosition.x, mousePosition.y, mousePosition.x, mousePosition.y);
-//        for (Fixture f : fixtureList) {
-//            if (f.getBody().getUserData() instanceof Sensor) {
-//                Sensor o = (Sensor) f.getBody().getUserData();
-//                System.out.println(o.getSensorPosition());
-//                break;
-//            }
-//        }
-//        return true;
-        return false;
+        Vector3 mousePosition = new Vector3(x, y, 0);
+        Drop.camera.unproject(mousePosition);
+        final List<Fixture> fixtureList = new ArrayList<>(5);
+        Drop.world.QueryAABB(new QueryCallback() {
+            @Override
+            public boolean reportFixture(Fixture fixture) {
+                fixtureList.add(fixture);
+                return true;
+            }
+        }, mousePosition.x, mousePosition.y, mousePosition.x, mousePosition.y);
+        for (Fixture f : fixtureList) {
+            if (f.getBody().getUserData() instanceof Sensor) {
+                Sensor o = (Sensor) f.getBody().getUserData();
+                this.startSection = o.section;
+                break;
+            }
+        }
+        System.out.println(this.startSection);
+        System.out.println(this.endLocation);
+        return true;
     }
 
     public boolean touchUp (int x, int y, int pointer, int button) {
-        return false;
+        Vector3 mousePosition = new Vector3(x, y, 0);
+        Drop.camera.unproject(mousePosition);
+        final List<Fixture> fixtureList = new ArrayList<>(5);
+        Drop.world.QueryAABB(new QueryCallback() {
+            @Override
+            public boolean reportFixture(Fixture fixture) {
+                fixtureList.add(fixture);
+                return true;
+            }
+        }, mousePosition.x, mousePosition.y, mousePosition.x, mousePosition.y);
+        for (Fixture f : fixtureList) {
+            if (f.getBody().getUserData() instanceof Location) {
+                Location o = (Location) f.getBody().getUserData();
+                this.endLocation = o;
+                for (Line l : Drop.lineList) {
+                    if (l.hasSection(this.startSection)) {
+                        l.addMiddle(this.endLocation, this.startSection);
+                    }
+                }
+                break;
+            }
+        }
+        System.out.println(this.startSection);
+        System.out.println(this.endLocation);
+        return true;
     }
 
     public boolean touchDragged (int x, int y, int pointer) {

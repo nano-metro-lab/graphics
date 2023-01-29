@@ -12,8 +12,9 @@ import static com.badlogic.drop.Drop.world;
 public class Sensor {
     private Body sensorBody;
     private Vector2 sensorPosition;
+    public Section section;
 
-    public Sensor(Vector2 v) {
+    public Sensor(Section s, Vector2 v) {
         BodyDef sensorBodyDef = new BodyDef();
         sensorBodyDef.type = BodyDef.BodyType.StaticBody;
         CircleShape sensorShape = new CircleShape();
@@ -24,6 +25,7 @@ public class Sensor {
         this.sensorBody.setUserData(this);
         sensorShape.dispose();
         this.sensorPosition = v;
+        this.section = s;
     }
 
     public Vector2 getSensorPosition() {

@@ -36,8 +36,8 @@ public class Drop extends ApplicationAdapter {
 
 	static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	private Line testLine;
-	private List<Line> lineList = new ArrayList<Line>(5);
-	private List<Train> trainList = new ArrayList<Train>(5);
+	static List<Line> lineList = new ArrayList<Line>(5);
+	static List<Train> trainList = new ArrayList<Train>(5);
 
 	public Drop() {
 	}
