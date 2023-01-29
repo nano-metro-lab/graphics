@@ -55,7 +55,9 @@ public class Drop extends ApplicationAdapter {
 		viewport = new FillViewport(900, 900, camera);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
-		setInputProcessor();
+//		setInputProcessor();
+//		new MouseInputProcessor();
+		Gdx.input.setInputProcessor(new MouseInputProcessor());
 		createBox();
 
 	}
@@ -132,6 +134,8 @@ public class Drop extends ApplicationAdapter {
 		line1.addTail(l2);
 		line1.addTail(l4);
 		line1.addTail(l9);
+//		line1.removeTail();
+		line1.removeMiddle(line1.getStation(l4));
 
 		this.lineList.add(line1);
 		this.trainList.add(new Train(line1));

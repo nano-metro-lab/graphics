@@ -15,7 +15,6 @@ public class Train {
     private Line line;
     private List<Vector2> route;
 
-
     // train motion control
     private Section currentSection = null;
     private float currentPercentage = 0;
@@ -26,6 +25,7 @@ public class Train {
         this.setUpBody();
         this.line = line;
         this.updateRoute();
+        this.trainBody.setUserData(this);
     }
 
     public void updateRoute() {
@@ -96,31 +96,4 @@ public class Train {
             this.currentSectionFinish = true;
         }
     }
-
-
-
-//    public void run() {
-//        runTime += Gdx.graphics.getDeltaTime();
-//        final float maxRunTime = 4.0f; // Hunt will last for 4 seconds, get a fraction value of this between 0 and 1.
-//        float f = runTime / maxRunTime;
-//        if (f <= 1.0f) {
-//            Vector2 bodyPosition = this.trainBody.getWorldCenter();
-//            CatmullRomSpline<Vector2> track = this.getTrack();
-//            track.valueAt(trainTargetPosition, f);
-//            Vector2 positionDelta = (new Vector2(trainTargetPosition)).sub(bodyPosition);
-//            this.trainBody.setLinearVelocity(positionDelta.scl(10));
-//        } else if (f <= 2.0f) {
-//            Vector2 bodyPosition = this.trainBody.getWorldCenter();
-//            CatmullRomSpline<Vector2> track = this.getTrack();
-//            track.valueAt(trainTargetPosition, 2.0f - f);
-//            Vector2 positionDelta = (new Vector2(trainTargetPosition)).sub(bodyPosition);
-//            this.trainBody.setLinearVelocity(positionDelta.scl(10));
-//        } else {
-//            this.runTime = 0;
-//            this.trainBody.setLinearVelocity(0, 0);
-//        }
-//
-//    }
-
-
 }

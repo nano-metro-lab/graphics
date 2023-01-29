@@ -24,11 +24,12 @@ public class Station {
         setStation(location.getPosition());
         stationShape.dispose();
         this.location = location;
+        this.stationBody.setUserData(this);
     }
 
 
     public void destroy() {
-        // Todo
+        world.destroyBody(this.stationBody);
     }
 
     public void setStation(Vector2 position) {
