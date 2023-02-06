@@ -15,6 +15,8 @@ public class Train {
     private Line line;
     private List<Vector2> route;
 
+    List<Passenger> PassengerList = new ArrayList<>();
+
     // train motion control
     private Section currentSection = null;
     private float currentPercentage = 0;

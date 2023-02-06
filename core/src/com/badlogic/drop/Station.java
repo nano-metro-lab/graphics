@@ -3,8 +3,14 @@ package com.badlogic.drop;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Station {
+
+    List<Passenger> PassengerList = new ArrayList<>();
+
     private Location location;
     public Location getLocation() {
         return location;
