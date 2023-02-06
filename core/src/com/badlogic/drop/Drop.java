@@ -38,6 +38,7 @@ public class Drop extends ApplicationAdapter {
 	private Line testLine;
 	static List<Line> lineList = new ArrayList<Line>(5);
 	static List<Train> trainList = new ArrayList<Train>(5);
+	static List<Location> locationList = new ArrayList<>(10);
 
 	public Drop() {
 	}
@@ -127,31 +128,37 @@ public class Drop extends ApplicationAdapter {
 		Location l8 = new Location(17, 17, Location.LocationType.CIRCLE);
 		Location l9 = new Location(29, 2, Location.LocationType.CIRCLE);
 
+		locationList.add(l1);
+		locationList.add(l2);
+		locationList.add(l3);
+		locationList.add(l4);
+		locationList.add(l5);
+		locationList.add(l6);
+		locationList.add(l7);
+		locationList.add(l8);
+		locationList.add(l9);
 
-		Line line1 = new Line();
-		line1.addTail(l5);
-		line1.addTail(l3);
+
+		Line line1 = new Line(l5, l3);
 		line1.addTail(l2);
 		line1.addTail(l4);
 		line1.addTail(l9);
 //		line1.removeTail();
-		line1.removeMiddle(line1.getStation(l4));
+		line1.removeMiddle(l4);
 
 		this.lineList.add(line1);
-		this.trainList.add(new Train(line1));
+		this.trainList.add(new Train(line1, line1.sectionList.get(0), 0f));
 
 
-		Line line2 = new Line();
-		line2.addTail(l6);
+		Line line2 = new Line(l6, l2);
 //		line2.addTail(l1);
-		line2.addTail(l2);
 		line2.addTail(l7);
 		line2.addMiddle(l1, line2.getSection(l6, l2));
 		line2.addMiddle(l8, line2.getSection(l1, l2));
 
 
 		this.lineList.add(line2);
-		this.trainList.add(new Train(line2));
+		this.trainList.add(new Train(line2, line2.sectionList.get(0), 0f));
 
 		shape.setProjectionMatrix(camera.combined);
 
@@ -169,20 +176,23 @@ public class Drop extends ApplicationAdapter {
 //		ScreenUtils.clear(0, 0, 0.2f, 1);
 //		ScreenUtils.clear(Color.valueOf("#002B4AFF"));
 		ScreenUtils.clear(Color.WHITE);
-
+//		batch.setProjectionMatrix(camera.combined);
 		// tell the camera to update its matrices.
 		camera.update();
-		// shape renderer
 		for (Line line : lineList) {
 			line.draw(shape);
 		}
-
-		// libgdx
 		debugRenderer.render(world, camera.combined);
 		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
 			train.run();
+			train.draw(batch);
 		}
+		for (Location l : locationList) {
+			l.draw(batch);
+		}
+
+
 		world.step(1/60f, 6, 2);
 	}
 

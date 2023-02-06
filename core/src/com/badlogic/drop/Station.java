@@ -9,19 +9,20 @@ import java.util.List;
 
 public class Station {
 
-    List<Passenger> PassengerList = new ArrayList<>();
+    Section upper;
+    Section lower;
+    Location location;
+    Line line;
 
-    private Location location;
-    public Location getLocation() {
-        return location;
-    }
+
     public Vector2 getPosition() {
         return this.location.getPosition();
     }
 
-    public Station(Location location) {
+    public Station(Line line, Location location) {
         setStation(location.getPosition());
         this.location = location;
+        this.line = line;
     }
 
 
