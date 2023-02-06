@@ -58,7 +58,6 @@ public class Drop extends ApplicationAdapter {
 //		setInputProcessor();
 //		new MouseInputProcessor();
 		Gdx.input.setInputProcessor(new MouseInputProcessor());
-		batch.setProjectionMatrix(camera.combined);
 		createBox();
 
 	}
@@ -166,7 +165,7 @@ public class Drop extends ApplicationAdapter {
 //		ScreenUtils.clear(0, 0, 0.2f, 1);
 //		ScreenUtils.clear(Color.valueOf("#002B4AFF"));
 		ScreenUtils.clear(Color.WHITE);
-
+//		batch.setProjectionMatrix(camera.combined);
 		// tell the camera to update its matrices.
 		camera.update();
 		// shape renderer
