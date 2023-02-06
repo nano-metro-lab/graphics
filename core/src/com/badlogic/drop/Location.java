@@ -22,17 +22,19 @@ public class Location {
         CIRCLE, TRIANGLE, SQUARE, PREVIEW
     }
     private Vector2 position;
-    private Body locationBody;
+    Body locationBody;
     BitmapFont debugFont;
-
     List<Passenger> passengerList = new ArrayList<>(30);
+    LocationType type;
 
-
-    public LocationType getType() {
-        return type;
+    public void addPassenger(Passenger p) {
+        this.passengerList.add(p);
     }
 
-    private LocationType type;
+    public void removePassenger(Passenger p) {
+        this.passengerList.remove(p);
+    }
+
 
     public Location(float x, float y, LocationType type) {
         this.position = new Vector2(x, y);
@@ -64,7 +66,7 @@ public class Location {
 
         Vector3 p = new Vector3(this.locationBody.getWorldCenter().x, this.locationBody.getWorldCenter().y, 0);
         Drop.camera.project(p);
-        debugFont.draw(batch, passengerList.toString(), p.x,p.y);
+        debugFont.draw(batch, type.toString() + passengerList.toString(), p.x,p.y);
 
         batch.end();
     }

@@ -14,4 +14,8 @@ public class Passenger {
     public String toString() {
         return type.toString();
     }
+
+    public void destroy() {
+        return;
+    }
 }

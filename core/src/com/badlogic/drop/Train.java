@@ -28,6 +28,23 @@ public class Train {
     float runTime = 0f;
     BitmapFont debugFont;
 
+    public void addPassenger(Passenger p) {
+        this.passengerList.add(p);
+    }
+
+    public void removePassenger(Passenger p) {
+        this.passengerList.remove(p);
+    }
+
+    public void stopTrain() {
+        stopSignal = 1;
+    }
+
+    public void startTrain() {
+        stopSignal = 0;
+    }
+
+
     public Train(Line l, Section s, float p) {
         this.setUpBody();
         this.line = l;
@@ -102,15 +119,14 @@ public class Train {
         if (progress > 1f) {
             if (stopSignal != 0) {
                 // ============== train stop at station ==============
-//                Vector2 bodyPosition = trainBody.getWorldCenter();
-//                Vector2 positionDelta = null;
-//                if (direction == Direction.DOWN) {
-//                    positionDelta = section.lower.getPosition().cpy().sub(bodyPosition);
-//                } else {
-//                    positionDelta = section.upper.getPosition().cpy().sub(bodyPosition);
-//                }
-//                this.trainBody.setLinearVelocity(positionDelta.scl(10));
-//
+                Vector2 bodyPosition = trainBody.getWorldCenter();
+                Vector2 positionDelta = null;
+                if (direction == Direction.DOWN) {
+                    positionDelta = section.lower.getPosition().cpy().sub(bodyPosition);
+                } else {
+                    positionDelta = section.upper.getPosition().cpy().sub(bodyPosition);
+                }
+                this.trainBody.setLinearVelocity(positionDelta.scl(10));
             } else {
                 // ============== train go to next section ==============
                 dumbController();
