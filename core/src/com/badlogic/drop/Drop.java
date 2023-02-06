@@ -128,9 +128,7 @@ public class Drop extends ApplicationAdapter {
 		Location l9 = new Location(29, 2, Location.LocationType.CIRCLE);
 
 
-		Line line1 = new Line();
-		line1.addTail(l5);
-		line1.addTail(l3);
+		Line line1 = new Line(l5, l3);
 		line1.addTail(l2);
 		line1.addTail(l4);
 		line1.addTail(l9);
@@ -141,10 +139,8 @@ public class Drop extends ApplicationAdapter {
 		this.trainList.add(new Train(line1));
 
 
-		Line line2 = new Line();
-		line2.addTail(l6);
+		Line line2 = new Line(l6, l2);
 //		line2.addTail(l1);
-		line2.addTail(l2);
 		line2.addTail(l7);
 		line2.addMiddle(l1, line2.getSection(l6, l2));
 		line2.addMiddle(l8, line2.getSection(l1, l2));
@@ -181,7 +177,7 @@ public class Drop extends ApplicationAdapter {
 		debugRenderer.render(world, camera.combined);
 		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
-			train.run();
+//			train.run();
 		}
 		world.step(1/60f, 6, 2);
 	}

@@ -14,9 +14,12 @@ public class Line {
     private static final World world = Drop.world;
 
 
-    public Line() {
+    public Line(Location a, Location b) {
         this.sectionList = new ArrayList<Section>(20);
         this.stationList = new ArrayList<Station>(21);
+        this.stationList.add(new Station(this, a));
+        this.stationList.add(new Station(this, b));
+        this.sectionList.add(new Section(this, this.stationList.get(0), this.stationList.get(1)));
     }
 
     public Section getNextSection(Section s) {
@@ -35,15 +38,9 @@ public class Line {
     }
 
     public Section getSection(Location locationA, Location locationB) {
-        List<Station> t = new ArrayList<Station>(2);
-        for (Station j : this.stationList) {
-            if (j.getLocation() == locationA || j.getLocation() == locationB) {
-                t.add(j);
-            }
-        }
-        for (Section i : this.sectionList) {
-            if (i.hasStation(t.get(0)) && i.hasStation(t.get(1))) {
-                return i;
+        for (Section s : sectionList) {
+            if ((s.upper.getLocation() == locationA && s.lower.getLocation() == locationB) || (s.upper.getLocation() == locationB && s.lower.getLocation() == locationA)) {
+                return s;
             }
         }
         return null;
@@ -54,17 +51,8 @@ public class Line {
 //        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 //        Gdx.gl.glLineWidth(25);
         if (stationList.size() < 2) return;
-
         for (Section s : this.sectionList) {
-            int k = s.getPathSamples().length;
-            for (int i = 0; i < k - 1; i++) {
-                shape.begin(ShapeRenderer.ShapeType.Line);
-                shape.setColor(Color.BLUE);
-                shape.line(s.getPathSamples()[i], s.getPathSamples()[i+1]);
-                shape.end();
-            }
-
-
+                s.draw(shape);
         }
 //        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
@@ -104,7 +92,7 @@ public class Line {
         }
     }
 
-    public void addMiddle(Section s, Location l) {
+    public void addMiddle(Location l, Section s) {
         Station aUpper = s.upper;
         Station middle = new Station(this, l);
         Station bLower = s.lower;
@@ -147,7 +135,6 @@ public class Line {
     }
 
 
-
     public Station getStation (Location l) {
         for (Station s : this.stationList) {
             if (s.getLocation() == l) return s;
@@ -159,23 +146,6 @@ public class Line {
     public boolean hasSection(Section s) {
         return this.sectionList.contains(s);
     }
-
-
-
-    private Vector2[] getMiddleControlPoints(Vector2 vA, Vector2 vB, Vector2 vC) {
-        Vector2 offsetA = vC.cpy().sub(vB);
-        Vector2 controlPointA = vA.cpy().add(offsetA);
-        Vector2 offsetB = vC.cpy().sub(vA);
-        Vector2 controlPointB = vB.cpy().add(offsetB);
-        float controlDistance = Section.controlDistance;
-        float distance = controlDistance / (float)Math.hypot(vA.x - vB.x, vA.y - vB.y);
-        controlPointA = vC.cpy().lerp(controlPointA, distance);
-        controlPointB = vC.cpy().lerp(controlPointB, distance);
-        return new Vector2[] {controlPointA, controlPointB};
-    }
-
-
-
 
 
 }

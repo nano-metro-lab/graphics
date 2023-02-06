@@ -25,14 +25,14 @@ public class Boxy {
                 (startingPoint.y - endingPoint.y) * (startingPoint.y - endingPoint.y));
     }
 
-    public static void main(String[] args) {
-        Boxy b = new Boxy(new Station(new Line(), new Location(0, 0, Location.LocationType.SQUARE)), new Station(new Line(), new Location(10, 10, Location.LocationType.SQUARE)));
-        System.out.println(b.approxLength());
-        Vector2 v = new Vector2();
-        b.valueAt(v, 0.5f);
-        System.out.println(v);
-
-    }
+//    public static void main(String[] args) {
+//        Boxy b = new Boxy(new Station(new Line(), new Location(0, 0, Location.LocationType.SQUARE)), new Station(new Line(), new Location(10, 10, Location.LocationType.SQUARE)));
+//        System.out.println(b.approxLength());
+//        Vector2 v = new Vector2();
+//        b.valueAt(v, 0.5f);
+//        System.out.println(v);
+//
+//    }
 
 }
 
