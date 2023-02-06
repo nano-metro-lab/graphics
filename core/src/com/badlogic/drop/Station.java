@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Station {
 
-    List<Passenger> PassengerList = new ArrayList<>(6);
     Section upper;
     Section lower;
     Location location;

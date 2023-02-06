@@ -1,6 +1,8 @@
 package com.badlogic.drop;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -45,15 +47,14 @@ public class Train {
         this.trainBody.setUserData(this);
     }
 
-//    private void resetTrain() {
-//        this.currentPercentage = 0;
-//        this.runTime = 0;
-//        this.currentSectionFinish = false;
-//    }
-
-//    public void run() {
-//        this.run(this.line.getFirstSection(), 0, false);
-//    }
+    public void draw(SpriteBatch batch) {
+        batch.begin();
+        BitmapFont font = new BitmapFont();
+//        FreeTypeFontGenerator
+        font.getData().setScale(0.1f, 0.1f);
+        font.draw(batch, "Hello World!", this.trainBody.getWorldCenter().x, this.trainBody.getWorldCenter().y);
+        batch.end();
+    }
 
     public void set() {
 
@@ -114,41 +115,4 @@ public class Train {
 
         }
     }
-
-//    public void run(Section s, float p, boolean d) {
-//        if (this.currentSection == null) {
-//            this.currentSection = s;
-//        }
-//
-//        if (this.currentSectionFinish) {
-//            this.resetTrain();
-//            if ((!this.currentDirection && this.line.getNextSection(this.currentSection) == null) || (this.currentDirection && this.line.getPreviousSection(this.currentSection) == null)) {
-//                this.currentDirection = !this.currentDirection;
-//            } else {
-//                this.currentSection = this.currentDirection?
-//                        this.line.getPreviousSection(this.currentSection) : this.line.getNextSection(this.currentSection);
-//            }
-//
-//        }
-//        this.runSection(this.currentSection);
-//    }
-
-//    public void runSection(Section s) {
-//        float sectionTimeLimit = this.timeLimit * s.getLength();
-//        if (runTime < sectionTimeLimit) { // tuned
-//            runTime += Gdx.graphics.getDeltaTime();
-//            float f = runTime / sectionTimeLimit;
-//            Vector2 bodyPosition = this.trainBody.getWorldCenter();
-//            Bezier<Vector2> track = s.getBezierPath();
-//            if (s.reverse ^ this.currentDirection) {
-//                track.valueAt(trainTargetPosition, 1 - f);
-//            } else {
-//                track.valueAt(trainTargetPosition, f);
-//            }
-//            Vector2 positionDelta = (new Vector2(trainTargetPosition)).sub(bodyPosition);
-//            this.trainBody.setLinearVelocity(positionDelta.scl(10));
-//        } else {
-//            this.currentSectionFinish = true;
-//        }
-//    }
 }

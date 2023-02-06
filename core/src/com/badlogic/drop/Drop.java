@@ -58,6 +58,7 @@ public class Drop extends ApplicationAdapter {
 //		setInputProcessor();
 //		new MouseInputProcessor();
 		Gdx.input.setInputProcessor(new MouseInputProcessor());
+		batch.setProjectionMatrix(camera.combined);
 		createBox();
 
 	}
@@ -178,6 +179,7 @@ public class Drop extends ApplicationAdapter {
 		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
 			train.run();
+			train.draw(batch);
 		}
 		world.step(1/60f, 6, 2);
 	}
