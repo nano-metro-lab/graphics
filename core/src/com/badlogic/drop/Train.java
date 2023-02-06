@@ -26,6 +26,7 @@ public class Train {
     float progress; // 0 - 1
     final float stdTimeLimit = 0.1f;
     float runTime = 0f;
+    BitmapFont debugFont;
 
     public Train(Line l, Section s, float p) {
         this.setUpBody();
@@ -34,6 +35,18 @@ public class Train {
         this.stopSignal = 0;
         this.progress = p;
         this.direction = Direction.DOWN; // default go down
+
+        // debug font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 20;
+        parameter.color = Color.BLACK;
+        BitmapFont font = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        this.debugFont = font;
+
+        //
+        passengerList.add(new Passenger(Location.LocationType.SQUARE));
     }
 
     private void setUpBody() {
@@ -52,15 +65,11 @@ public class Train {
 
     public void draw(SpriteBatch batch) {
         batch.begin();
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
-        parameter.color = Color.BLACK;
-        BitmapFont font = generator.generateFont(parameter); // font size 12 pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
         Vector3 p = new Vector3(this.trainBody.getWorldCenter().x, this.trainBody.getWorldCenter().y, 0);
         Drop.camera.project(p);
-        font.draw(batch, passengerList.toString(), p.x,p.y);
+        debugFont.draw(batch, passengerList.toString(), p.x,p.y);
+
         batch.end();
     }
 

@@ -38,6 +38,7 @@ public class Drop extends ApplicationAdapter {
 	private Line testLine;
 	static List<Line> lineList = new ArrayList<Line>(5);
 	static List<Train> trainList = new ArrayList<Train>(5);
+	static List<Location> locationList = new ArrayList<>(10);
 
 	public Drop() {
 	}
@@ -127,6 +128,16 @@ public class Drop extends ApplicationAdapter {
 		Location l8 = new Location(17, 17, Location.LocationType.CIRCLE);
 		Location l9 = new Location(29, 2, Location.LocationType.CIRCLE);
 
+		locationList.add(l1);
+		locationList.add(l2);
+		locationList.add(l3);
+		locationList.add(l4);
+		locationList.add(l5);
+		locationList.add(l6);
+		locationList.add(l7);
+		locationList.add(l8);
+		locationList.add(l9);
+
 
 		Line line1 = new Line(l5, l3);
 		line1.addTail(l2);
@@ -168,18 +179,20 @@ public class Drop extends ApplicationAdapter {
 //		batch.setProjectionMatrix(camera.combined);
 		// tell the camera to update its matrices.
 		camera.update();
-		// shape renderer
 		for (Line line : lineList) {
 			line.draw(shape);
 		}
-
-		// libgdx
 		debugRenderer.render(world, camera.combined);
 		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
 			train.run();
 			train.draw(batch);
 		}
+		for (Location l : locationList) {
+			l.draw(batch);
+		}
+
+
 		world.step(1/60f, 6, 2);
 	}
 
