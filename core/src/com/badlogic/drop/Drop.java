@@ -133,10 +133,10 @@ public class Drop extends ApplicationAdapter {
 		line1.addTail(l4);
 		line1.addTail(l9);
 //		line1.removeTail();
-		line1.removeMiddle(line1.getStation(l4));
+		line1.removeMiddle(l4);
 
 		this.lineList.add(line1);
-		this.trainList.add(new Train(line1));
+		this.trainList.add(new Train(line1, line1.sectionList.get(0), 0f));
 
 
 		Line line2 = new Line(l6, l2);
@@ -147,7 +147,7 @@ public class Drop extends ApplicationAdapter {
 
 
 		this.lineList.add(line2);
-		this.trainList.add(new Train(line2));
+		this.trainList.add(new Train(line2, line2.sectionList.get(0), 0f));
 
 		shape.setProjectionMatrix(camera.combined);
 
@@ -177,7 +177,7 @@ public class Drop extends ApplicationAdapter {
 		debugRenderer.render(world, camera.combined);
 		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
-//			train.run();
+			train.run();
 		}
 		world.step(1/60f, 6, 2);
 	}

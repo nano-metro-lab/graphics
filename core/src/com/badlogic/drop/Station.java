@@ -10,18 +10,12 @@ import java.util.List;
 public class Station {
 
     List<Passenger> PassengerList = new ArrayList<>(6);
-    List<Section> SectionList = new ArrayList<>(2);
-
     Section upper;
     Section lower;
-
-
-
-    private Location location;
+    Location location;
     Line line;
-    public Location getLocation() {
-        return location;
-    }
+
+
     public Vector2 getPosition() {
         return this.location.getPosition();
     }

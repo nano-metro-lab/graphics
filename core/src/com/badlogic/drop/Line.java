@@ -39,7 +39,7 @@ public class Line {
 
     public Section getSection(Location locationA, Location locationB) {
         for (Section s : sectionList) {
-            if ((s.upper.getLocation() == locationA && s.lower.getLocation() == locationB) || (s.upper.getLocation() == locationB && s.lower.getLocation() == locationA)) {
+            if ((s.upper.location == locationA && s.lower.location == locationB) || (s.upper.location == locationB && s.lower.location == locationA)) {
                 return s;
             }
         }
@@ -103,9 +103,17 @@ public class Line {
         s.destroy();
     }
 
-    public void removeMiddle(Station s) {
+    public void removeMiddle(Location l) {
         Section a = null;
         Section b = null;
+        Station s = null;
+        for (Station i : stationList) {
+            if (i.location == l) {
+                s = i;
+                break;
+            }
+        }
+
         for (Section i : sectionList) {
             if (i.upper == s) {
                 b = i;
@@ -135,13 +143,13 @@ public class Line {
     }
 
 
-    public Station getStation (Location l) {
-        for (Station s : this.stationList) {
-            if (s.getLocation() == l) return s;
-//            else return null;
-        }
-        return null;
-    }
+//    public Station getStation (Location l) {
+//        for (Station s : this.stationList) {
+//            if (s.getLocation() == l) return s;
+////            else return null;
+//        }
+//        return null;
+//    }
 
     public boolean hasSection(Section s) {
         return this.sectionList.contains(s);
