@@ -1,4 +1,4 @@
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -49,7 +49,7 @@ public class Section {
         }
     }
 
-    private static final World world = Drop.world;
+    private static final World world = Main.world;
 
 //    public void update() {
 //        this.generateSamples();

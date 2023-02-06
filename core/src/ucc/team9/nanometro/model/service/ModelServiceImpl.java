@@ -1,9 +1,9 @@
-package model.service;
+package ucc.team9.nanometro.model.service;
 
-import model.core.Line;
-import model.core.Route;
-import model.core.Station;
-import model.shared.StationType;
+import ucc.team9.nanometro.model.core.Line;
+import ucc.team9.nanometro.model.core.Route;
+import ucc.team9.nanometro.model.core.Station;
+import ucc.team9.nanometro.model.shared.StationType;
 
 import java.util.List;
 

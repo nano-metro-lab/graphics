@@ -1,4 +1,4 @@
-package model.service;
+package ucc.team9.nanometro.model.service;
 
 import java.util.Collection;
 import java.util.stream.Stream;

@@ -2,7 +2,7 @@ sourceCompatibility = JavaVersion.VERSION_17
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../assets"]
 
-project.ext.mainClassName = "com.badlogic.drop.DesktopLauncher"
+project.ext.mainClassName = "ucc.team9.nanometro.DesktopLauncher"
 project.ext.assetsDir = new File("../assets")
 
 import org.gradle.internal.os.OperatingSystem

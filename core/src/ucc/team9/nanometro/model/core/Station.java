@@ -1,6 +1,6 @@
-package model.core;
+package ucc.team9.nanometro.model.core;
 
-import model.shared.StationType;
+import ucc.team9.nanometro.model.shared.StationType;
 
 import java.util.*;
 import java.util.function.Function;

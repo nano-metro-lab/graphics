@@ -1,4 +1,4 @@
-package model.core;
+package ucc.team9.nanometro.model.core;
 
 import java.util.Collection;
 import java.util.Comparator;

@@ -1,6 +1,6 @@
-package model.service;
+package ucc.team9.nanometro.model.service;
 
-import model.shared.StationType;
+import ucc.team9.nanometro.model.shared.StationType;
 
 import java.util.List;
 

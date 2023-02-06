@@ -1,4 +1,4 @@
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,8 +13,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.badlogic.drop.Drop.world;
 
 public class Location {
 
@@ -41,7 +39,7 @@ public class Location {
         this.type = type;
 
         BodyDef locationBodyDef = new BodyDef();
-        this.locationBody = world.createBody(locationBodyDef);
+        this.locationBody = Main.world.createBody(locationBodyDef);
         CircleShape locationShape = new CircleShape();
         locationShape.setRadius(2f);
         this.locationBody.createFixture(locationShape, 0.0f);
@@ -65,14 +63,14 @@ public class Location {
         batch.begin();
 
         Vector3 p = new Vector3(this.locationBody.getWorldCenter().x, this.locationBody.getWorldCenter().y, 0);
-        Drop.camera.project(p);
+        Main.camera.project(p);
         debugFont.draw(batch, type.toString() + passengerList.toString(), p.x,p.y);
 
         batch.end();
     }
 
     public void destroy() {
-        world.destroyBody(this.locationBody);
+        Main.world.destroyBody(this.locationBody);
     }
 
     public Vector2 getPosition() {

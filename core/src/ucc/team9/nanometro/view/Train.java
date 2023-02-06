@@ -1,4 +1,4 @@
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -16,7 +16,7 @@ public class Train {
     public enum Direction {
         UP, DOWN
     }
-    static World world = Drop.world;
+    static World world = Main.world;
     Body trainBody;
     List<Passenger> passengerList = new ArrayList<>();
     Line line;
@@ -84,7 +84,7 @@ public class Train {
         batch.begin();
 
         Vector3 p = new Vector3(this.trainBody.getWorldCenter().x, this.trainBody.getWorldCenter().y, 0);
-        Drop.camera.project(p);
+        Main.camera.project(p);
         debugFont.draw(batch, passengerList.toString(), p.x,p.y);
 
         batch.end();
