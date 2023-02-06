@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Line {
-    private final List<Station> stationList;
-    private final List<Section> sectionList;
+    final List<Station> stationList;
+    final List<Section> sectionList;
     private static final World world = Drop.world;
 
 
@@ -19,65 +19,18 @@ public class Line {
         this.stationList = new ArrayList<Station>(21);
     }
 
-    public Section getFirstSection() {
-        if (this.sectionList == null) {
+    public Section getNextSection(Section s) {
+        if (sectionList.indexOf(s) == sectionList.size() - 1) {
             return null;
-        } return this.sectionList.get(0);
-    }
-
-    public Section getNextSection(Section currentSection) {
-        if (this.stationList.indexOf(currentSection.getStartStation()) < this.stationList.indexOf(currentSection.getEndStation())) {
-            Station i = currentSection.getEndStation();
-            if (this.stationList.indexOf(i) == this.stationList.size() - 1 ) {
-                return null;
-            } else {
-                Station j = this.stationList.get(this.stationList.indexOf(i) + 1);
-                return this.getSection(i.getLocation(), j.getLocation());
-            }
         } else {
-            Station i = currentSection.getStartStation();
-            if (this.stationList.indexOf(i) == this.stationList.size() - 1 ) {
-                return null;
-            } else {
-                Station j = this.stationList.get(this.stationList.indexOf(i) + 1);
-                return this.getSection(i.getLocation(), j.getLocation());
-            }
+            return sectionList.get(sectionList.indexOf(s) + 1);
         }
     }
-
-    public Section getPreviousSection(Section currentSection) {
-        if (this.stationList.indexOf(currentSection.getStartStation()) < this.stationList.indexOf(currentSection.getEndStation())) {
-            Station i = currentSection.getStartStation();
-            if (this.stationList.indexOf(i) == 0 ) {
-                return null;
-            } else {
-                Station j = this.stationList.get(this.stationList.indexOf(i) - 1);
-                return this.getSection(i.getLocation(), j.getLocation());
-            }
+    public Section getPreviousSection(Section s) {
+        if (sectionList.indexOf(s) == 0) {
+            return null;
         } else {
-            Station i = currentSection.getEndStation();
-            if (this.stationList.indexOf(i) == 0 ) {
-                return null;
-            } else {
-                Station j = this.stationList.get(this.stationList.indexOf(i) - 1);
-                return this.getSection(i.getLocation(), j.getLocation());
-            }
-        }
-    }
-
-
-    public void updateSections() {
-        if (this.sectionList.isEmpty()) return;
-        for (Section i : this.sectionList) {
-            i.update();
-        }
-
-        for (Section i : this.sectionList) {
-            if (this.stationList.indexOf(i.getStartStation()) < this.stationList.indexOf(i.getEndStation())) {
-                i.reverse = false;
-            } else {
-                i.reverse = true;
-            }
+            return sectionList.get(sectionList.indexOf(s) - 1);
         }
     }
 
@@ -116,118 +69,84 @@ public class Line {
 //        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    public void addTail(Location location) {
-
-        Station endStation = new Station(location);
-        if (location.getType() != Location.LocationType.PREVIEW) {
-            this.stationList.add(endStation);
-        }
-
-        if (this.stationList.size() == 1) {
-            return;
-        } else if (this.stationList.size() == 2) {
-            Station startStation = this.stationList.get(this.stationList.size()-2);
-            this.sectionList.add(new Section(startStation, endStation));
-        } else {
-            Station startStation = this.stationList.get(this.stationList.size()-2);
-            Section previousSection = null;
-            for (Section i : this.sectionList) {
-                if (i.hasStation(startStation)) {
-                    previousSection = i;
-                }
-            }
-            if (previousSection == null) System.out.println("Errrror");
-            this.sectionList.add(new Section(startStation, endStation, previousSection));
-        }
-        this.updateSections();
+    public void addTail(Location l) {
+        Station s = new Station(this, l);
+        Station f = stationList.get(stationList.size() - 1);
+        stationList.add(s);
+        sectionList.add(new Section(this, f, s));
     }
 
     public void removeTail() {
-        Station s1 = this.stationList.get(this.stationList.size()-1);
-        Station s2 = this.stationList.get(this.stationList.size()-2);
-        Section section = this.getSection(s1.getLocation(), s2.getLocation());
-        section.destroy();
-        s1.destroy();
-        this.stationList.remove(s1);
-        this.sectionList.remove(section);
-        this.updateSections();
-    }
-
-    public void addHead(Location location) {
-        if (this.stationList.size() >= 2) {
-            Station startStation = this.stationList.get(0);
-            Station endStation = new Station(location);
-            Section previousSection = null;
-            for (Section i : this.sectionList) {
-                if (i.hasStation(startStation)) {
-                    previousSection = i;
-                }
-            }
-            if (previousSection == null) System.out.println("Errrror");
-            this.sectionList.add(new Section(startStation, endStation, previousSection));
+        if (sectionList.size() == 1) {
+            destroy();
         } else {
-            System.out.println("should not happen");
+            stationList.get(stationList.size() - 1).destroy();
+            stationList.remove(stationList.size() - 1);
+            sectionList.get(sectionList.size() - 1).destroy();
+            sectionList.remove(sectionList.size() - 1);
         }
     }
-    public void addMiddle(Location location, Section existingSection) {
-        Station middleStation = new Station(location);
-        Station stationA = existingSection.getStartStation();
-        Station stationB = existingSection.getEndStation();
-        int index = this.stationList.indexOf(stationA) > this.stationList.indexOf(stationB) ?
-                this.stationList.indexOf(stationB) + 1 : this.stationList.indexOf(stationA) + 1;
-        this.stationList.add(index, middleStation);
-        // gen control points
-        Vector2[] middleControlPoints = this.getMiddleControlPoints(stationA.getPosition(),
-                stationB.getPosition(), middleStation.getPosition());
-        Vector2 controlPointA = middleControlPoints[0];
-        Vector2 controlPointB = middleControlPoints[1];
-        if (stationA == this.stationList.get(0) || stationA == this.stationList.get(this.stationList.size()-1)) {
-            this.sectionList.add(new Section(middleStation, stationA, controlPointA));
-        } else {
-            this.sectionList.add(new Section(stationA, middleStation,
-                    existingSection.getControlPoint(stationA), controlPointA));
-        }
-
-        if (stationB == this.stationList.get(0) || stationB == this.stationList.get(this.stationList.size()-1)) {
-            this.sectionList.add(new Section(middleStation, stationB, controlPointB));
-        } else {
-            this.sectionList.add(new Section(stationB, middleStation,
-                    existingSection.getControlPoint(stationB), controlPointB));
-        }
-
-//
-        existingSection.destroy();
-        this.sectionList.remove(existingSection);
-        this.updateSections();
+    public void addHead(Location l) {
+        Station s = new Station(this, l);
+        Station f = stationList.get(stationList.size() - 1);
+        stationList.add(0, s);
+        sectionList.add(0, new Section(this, s, f));
     }
 
-    public void removeMiddle(Station station) {
-        Vector2 p1 = null, p2 = null;
-        Station a = null, b = null;
-        for (Section s : this.sectionList) {
-            if (s.hasStation(station)) {
-                a = s.getOppositeStation(station);
-                p1 = s.getControlPoint(s.getOppositeStation(station));
-                s.destroy();
-                this.sectionList.remove(s);
-                break;
+    public void removeHead() {
+        if (sectionList.size() == 1) {
+            this.destroy();
+        } else {
+            stationList.get(0).destroy();
+            stationList.remove(0);
+            sectionList.get(0).destroy();
+            sectionList.remove(0);
+        }
+    }
+
+    public void addMiddle(Section s, Location l) {
+        Station aUpper = s.upper;
+        Station middle = new Station(this, l);
+        Station bLower = s.lower;
+        stationList.add(stationList.indexOf(aUpper) + 1, middle);
+        sectionList.add(sectionList.indexOf(s), new Section(this, aUpper, middle));
+        sectionList.add(sectionList.indexOf(s), new Section(this, middle, bLower));
+        sectionList.remove(s);
+        s.destroy();
+    }
+
+    public void removeMiddle(Station s) {
+        Section a = null;
+        Section b = null;
+        for (Section i : sectionList) {
+            if (i.upper == s) {
+                b = i;
+            } else if (i.lower == s) {
+                a = i;
             }
         }
-
-        for (Section s : this.sectionList) {
-            if (s.hasStation(station)) {
-                b = s.getOppositeStation(station);
-                p2 = s.getControlPoint(s.getOppositeStation(station));
-                s.destroy();
-                this.sectionList.remove(s);
-                break;
-            }
-        }
-        station.destroy();
-        this.stationList.remove(station);
-        this.sectionList.add(new Section(a, b, p1, p2));
-        this.updateSections();
+        stationList.remove(s);
+        s.destroy();
+        sectionList.add(sectionList.indexOf(a), new Section(this, a.upper, b.lower));
+        sectionList.remove(a);
+        sectionList.remove(b);
+        a.destroy();
+        b.destroy();
     }
+
+
+    public void destroy() {
+        for (Station s : stationList) {
+            s.destroy();
+        }
+        stationList.removeAll(stationList);
+        for (Section s : sectionList) {
+            s.destroy();
+        }
+        sectionList.removeAll(sectionList);
+    }
+
+
 
     public Station getStation (Location l) {
         for (Station s : this.stationList) {

@@ -9,9 +9,16 @@ import java.util.List;
 
 public class Station {
 
-    List<Passenger> PassengerList = new ArrayList<>();
+    List<Passenger> PassengerList = new ArrayList<>(6);
+    List<Section> SectionList = new ArrayList<>(2);
+
+    Section upper;
+    Section lower;
+
+
 
     private Location location;
+    Line line;
     public Location getLocation() {
         return location;
     }
@@ -19,9 +26,10 @@ public class Station {
         return this.location.getPosition();
     }
 
-    public Station(Location location) {
+    public Station(Line line, Location location) {
         setStation(location.getPosition());
         this.location = location;
+        this.line = line;
     }
 
 
