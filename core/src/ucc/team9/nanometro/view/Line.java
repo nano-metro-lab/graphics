@@ -1,8 +1,6 @@
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.List;
 public class Line {
     final List<Station> stationList;
     final List<Section> sectionList;
-    private static final World world = Drop.world;
+    private static final World world = Main.world;
 
 
     public Line(Location a, Location b) {

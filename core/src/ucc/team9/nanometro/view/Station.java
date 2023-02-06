@@ -1,10 +1,6 @@
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Station {

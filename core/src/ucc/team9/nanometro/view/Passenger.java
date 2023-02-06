@@ -1,4 +1,4 @@
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
 public class Passenger {
     private Location.LocationType type; // destination type

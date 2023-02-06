@@ -1,11 +1,11 @@
 /*
 This is the main entry point.
-It names Drop, because this project uses libGDX's Drop tutorial project as the basis.
+It names Main, because this project uses libGDX's Main tutorial project as the basis.
  */
 
 
 
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Drop extends ApplicationAdapter {
+public class Main extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
 	static OrthographicCamera camera;
@@ -40,7 +40,7 @@ public class Drop extends ApplicationAdapter {
 	static List<Train> trainList = new ArrayList<Train>(5);
 	static List<Location> locationList = new ArrayList<>(10);
 
-	public Drop() {
+	public Main() {
 	}
 
 	@Override

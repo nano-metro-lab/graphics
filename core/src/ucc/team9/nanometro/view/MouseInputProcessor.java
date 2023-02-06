@@ -1,4 +1,4 @@
-package com.badlogic.drop;
+package ucc.team9.nanometro.view;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
@@ -41,9 +41,9 @@ public class MouseInputProcessor implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
         // check mouse box collision
         Vector3 mousePosition = new Vector3(x, y, 0);
-        Drop.camera.unproject(mousePosition);
+        Main.camera.unproject(mousePosition);
         final List<Fixture> fixtureList = new ArrayList<>(5);
-        Drop.world.QueryAABB(new QueryCallback() {
+        Main.world.QueryAABB(new QueryCallback() {
             @Override
             public boolean reportFixture(Fixture fixture) {
                 fixtureList.add(fixture);
@@ -64,9 +64,9 @@ public class MouseInputProcessor implements InputProcessor {
 
     public boolean touchUp (int x, int y, int pointer, int button) {
         Vector3 mousePosition = new Vector3(x, y, 0);
-        Drop.camera.unproject(mousePosition);
+        Main.camera.unproject(mousePosition);
         final List<Fixture> fixtureList = new ArrayList<>(5);
-        Drop.world.QueryAABB(new QueryCallback() {
+        Main.world.QueryAABB(new QueryCallback() {
             @Override
             public boolean reportFixture(Fixture fixture) {
                 fixtureList.add(fixture);
@@ -77,7 +77,7 @@ public class MouseInputProcessor implements InputProcessor {
             if (f.getBody().getUserData() instanceof Location) {
                 Location o = (Location) f.getBody().getUserData();
                 this.endLocation = o;
-                for (Line l : Drop.lineList) {
+                for (Line l : Main.lineList) {
                     if (l.hasSection(this.startSection)) {
                         l.addMiddle(this.endLocation, this.startSection);
                     }
@@ -92,10 +92,10 @@ public class MouseInputProcessor implements InputProcessor {
 
     public boolean touchDragged (int x, int y, int pointer) {
 //        Vector3 mousePosition = new Vector3(x, y, 0);
-//        Drop.camera.unproject(mousePosition);
+//        Main.camera.unproject(mousePosition);
 //
 //        final List<Fixture> fixtureList = new ArrayList<>(10);
-//        Drop.world.QueryAABB(new QueryCallback() {
+//        Main.world.QueryAABB(new QueryCallback() {
 //            @Override
 //            public boolean reportFixture(Fixture fixture) {
 //                fixtureList.add(fixture);
