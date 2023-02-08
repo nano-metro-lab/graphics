@@ -5,7 +5,7 @@ It names Main, because this project uses libGDX's Main tutorial project as the b
 
 
 
-package ucc.team9.nanometro.view;
+package ucc.team9.nanometro;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -29,14 +29,14 @@ import java.util.List;
 public class Main extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
-	static OrthographicCamera camera;
+	public static OrthographicCamera camera;
 	private Viewport viewport;
 	private Box2DDebugRenderer debugRenderer;
 	private Body MouseBox;
 
-	static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
+	public static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	private Line testLine;
-	static List<Line> lineList = new ArrayList<Line>(5);
+	public static List<Line> lineList = new ArrayList<Line>(5);
 	static List<Train> trainList = new ArrayList<Train>(5);
 	static List<Location> locationList = new ArrayList<>(10);
 
