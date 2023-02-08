@@ -1,4 +1,4 @@
-package ucc.team9.nanometro.view;
+package ucc.team9.nanometro;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Line {
     final List<Station> stationList;
-    final List<Section> sectionList;
+    public final List<Section> sectionList;
     private static final World world = Main.world;
 
 

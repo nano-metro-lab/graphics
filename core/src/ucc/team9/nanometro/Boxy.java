@@ -1,4 +1,4 @@
-package ucc.team9.nanometro.view;
+package ucc.team9.nanometro;
 
 
 /*

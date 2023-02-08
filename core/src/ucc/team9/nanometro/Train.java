@@ -1,4 +1,4 @@
-package ucc.team9.nanometro.view;
+package ucc.team9.nanometro;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -95,6 +95,15 @@ public class Train {
     }
 
     public void dumbController() {
+//        Timer.schedule(new Timer.Task() {
+//            @Override
+//            public void run() {
+//                startTrain();
+//            }
+//        }, 3);
+//
+//        stopTrain();
+
         runTime = 0f;
         if (line.getNextSection(section) == null && direction == Direction.DOWN) {
             section = section;

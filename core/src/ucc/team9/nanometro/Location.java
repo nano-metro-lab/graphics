@@ -1,4 +1,4 @@
-package ucc.team9.nanometro.view;
+package ucc.team9.nanometro;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
