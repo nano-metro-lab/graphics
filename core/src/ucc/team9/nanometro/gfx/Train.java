@@ -1,4 +1,4 @@
-package ucc.team9.nanometro;
+package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import ucc.team9.nanometro.Main;
 
 import java.util.ArrayList;
 import java.util.List;

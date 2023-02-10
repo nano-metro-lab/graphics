@@ -1,4 +1,4 @@
-package ucc.team9.nanometro;
+package ucc.team9.nanometro.gfx;
 
 public class Passenger {
     private Location.LocationType type; // destination type

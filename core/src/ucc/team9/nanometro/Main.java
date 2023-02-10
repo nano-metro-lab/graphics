@@ -7,6 +7,8 @@ It names Main, because this project uses libGDX's Main tutorial project as the b
 
 package ucc.team9.nanometro;
 
+import ucc.team9.nanometro.gfx.*;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -59,7 +61,7 @@ public class Main extends ApplicationAdapter {
 //		setInputProcessor();
 //		new MouseInputProcessor();
 		Gdx.input.setInputProcessor(new MouseInputProcessor());
-		createBox();
+		setup();
 
 	}
 
@@ -114,7 +116,7 @@ public class Main extends ApplicationAdapter {
 		});
 
 	}
-	private void createBox() {
+	private void setup() {
 		// Todo should wrap station and assign uuid to each obj
 		// Todo should implement simple BUS, to broadcast events to other components
 		// Camera 40 x 40
@@ -148,6 +150,9 @@ public class Main extends ApplicationAdapter {
 		this.trainList.add(new Train(line3, line3.sectionList.get(0), 0f));
 
 		shape.setProjectionMatrix(camera.combined);
+
+		// Model part
+//		var modelService = ModelServiceFactory
 
 	}
 

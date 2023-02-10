@@ -1,7 +1,8 @@
-package ucc.team9.nanometro;
+package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import ucc.team9.nanometro.Main;
 
 import java.util.ArrayList;
 import java.util.List;
