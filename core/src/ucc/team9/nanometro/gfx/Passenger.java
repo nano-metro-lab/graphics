@@ -8,6 +8,7 @@ import java.util.List;
 public class Passenger {
     private Location.LocationType type; // destination type
     public Location location;
+    public Location nextHop;
     public Passenger(Location.LocationType type) {
         this.type = type;
         this.location = null;

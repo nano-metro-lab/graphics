@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import ucc.team9.nanometro.model.service.ModelService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,8 @@ public class Main extends ApplicationAdapter {
 	private Body MouseBox;
 
 	public static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
+
+//	world.s
 	private Line testLine;
 	public static List<Line> lineList = new ArrayList<Line>(5);
 	static List<Train> trainList = new ArrayList<Train>(5);
@@ -47,6 +50,7 @@ public class Main extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+//		world.setContactListener(new _Listener());
 
 		// Todo Input event listener
 
@@ -116,6 +120,9 @@ public class Main extends ApplicationAdapter {
 		});
 
 	}
+
+
+	public static ModelService modelService = ModelServiceFactory.getInstance();
 	private void setup() {
 		// Todo should wrap station and assign uuid to each obj
 		// Todo should implement simple BUS, to broadcast events to other components
@@ -127,7 +134,7 @@ public class Main extends ApplicationAdapter {
 		Location l4 = new Location(28, 20, Location.LocationType.CIRCLE);
 		Location l5 = new Location(36, 20, Location.LocationType.TRIANGLE);
 		Location l6 = new Location(12, 12, Location.LocationType.CIRCLE);
-		Location l7 = new Location(12, 4, Location.LocationType.TRIANGLE);
+		Location l7 = new Location(12, 4, Location.LocationType.SQUARE);
 		Location l8 = new Location(20, 12, Location.LocationType.TRIANGLE);
 
 		locationList = List.of(l1, l2, l3, l4, l5, l6, l7, l8);
@@ -141,6 +148,8 @@ public class Main extends ApplicationAdapter {
 		this.lineList.add(line1);
 		this.trainList.add(new Train(line1, line1.sectionList.get(0), 0f));
 
+
+
 		Line line2 = new Line(l2, l6);
 		line2.addTail(l7);
 		this.lineList.add(line2);
@@ -152,7 +161,7 @@ public class Main extends ApplicationAdapter {
 		shape.setProjectionMatrix(camera.combined);
 
 		// Model part
-		var modelService = ModelServiceFactory.getInstance();
+
 
 		for (Location l : locationList) {
 			modelService.addStation(l, l.getType());
@@ -166,6 +175,9 @@ public class Main extends ApplicationAdapter {
 
 		modelService.addLine(line3);
 		modelService.updateLine(line3, line3.getLocationList());
+
+
+		l1.addPassenger(new Passenger(Location.LocationType.SQUARE));
 
 
 

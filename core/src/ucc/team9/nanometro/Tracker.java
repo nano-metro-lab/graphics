@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Tracker {
 
-    public void updateDestination(ModelService modelService, Passenger p) {
-        List<Location> destinations = modelService.findDestinations(Location.LocationType.TRIANGLE, p.location, );
-    }
+//    public void updateDestination(ModelService modelService, Passenger p) {
+//        List<Location> destinations = modelService.findDestinations(Location.LocationType.TRIANGLE, p.location, );
+//    }
 }
