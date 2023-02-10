@@ -152,7 +152,24 @@ public class Main extends ApplicationAdapter {
 		shape.setProjectionMatrix(camera.combined);
 
 		// Model part
-//		var modelService = ModelServiceFactory
+		var modelService = ModelServiceFactory.getInstance();
+
+		for (Location l : locationList) {
+			modelService.addStation(l, l.getType());
+		}
+
+		modelService.addLine(line1);
+		modelService.updateLine(line1, line1.getLocationList());
+
+		modelService.addLine(line2);
+		modelService.updateLine(line2, line2.getLocationList());
+
+		modelService.addLine(line3);
+		modelService.updateLine(line3, line3.getLocationList());
+
+
+
+
 
 	}
 

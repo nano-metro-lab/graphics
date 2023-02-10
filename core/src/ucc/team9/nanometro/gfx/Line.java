@@ -8,9 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Line {
-    final List<Station> stationList;
+    public final List<Station> stationList;
     public final List<Section> sectionList;
     private static final World world = Main.world;
+
+
+    public List<Location> getLocationList() {
+        List<Location> l = new ArrayList<>();
+        for (Station s : stationList) {
+            l.add(s.location);
+        }
+        return l;
+    }
 
 
     public Line(Location a, Location b) {

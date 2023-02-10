@@ -12,14 +12,20 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import ucc.team9.nanometro.Main;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Location {
 
-    public enum LocationType {
+    public enum LocationType implements ucc.team9.nanometro.model.shared.LocationType {
         CIRCLE, TRIANGLE, SQUARE, PREVIEW
     }
+
+    public LocationType getType() {
+        return this.type;
+    }
+
     private Vector2 position;
     Body locationBody;
     BitmapFont debugFont;
