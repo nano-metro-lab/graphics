@@ -64,7 +64,7 @@ public class Train {
         this.debugFont = font;
 
         //
-        passengerList.add(new Passenger(Location.LocationType.SQUARE));
+//        passengerList.add(new Passenger(Location.LocationType.SQUARE));
     }
 
     private void setUpBody() {
