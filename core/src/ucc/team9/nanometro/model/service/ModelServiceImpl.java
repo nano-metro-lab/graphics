@@ -3,7 +3,7 @@ package ucc.team9.nanometro.model.service;
 import ucc.team9.nanometro.model.core.Line;
 import ucc.team9.nanometro.model.core.Route;
 import ucc.team9.nanometro.model.core.Station;
-import ucc.team9.nanometro.model.shared.StationType;
+import ucc.team9.nanometro.model.shared.LocationType;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class ModelServiceImpl<StationId, LineId> implements ModelService<Station
   }
 
   @Override
-  public List<StationId> findDestinations(StationType destinationType, StationId stationId, StationId nextStationId) {
+  public List<StationId> findDestinations(LocationType destinationType, StationId stationId, StationId nextStationId) {
     Station station = stationDao.get(stationId);
     Station nextStation = stationDao.get(nextStationId);
     return station.getRoutes(destinationType)
@@ -26,7 +26,7 @@ public class ModelServiceImpl<StationId, LineId> implements ModelService<Station
   }
 
   @Override
-  public void addStation(StationId id, StationType type) {
+  public void addStation(StationId id, LocationType type) {
     stationDao.add(id, new Station(type));
   }
 

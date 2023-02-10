@@ -1,4 +1,4 @@
 package ucc.team9.nanometro.model.shared;
 
-public interface StationType {
+public interface LocationType {
 }

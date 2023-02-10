@@ -1,6 +1,6 @@
 package ucc.team9.nanometro.model.core;
 
-import ucc.team9.nanometro.model.shared.StationType;
+import ucc.team9.nanometro.model.shared.LocationType;
 
 import java.util.*;
 import java.util.function.UnaryOperator;
@@ -65,7 +65,7 @@ public class Line {
     return isFindingRoutes;
   }
 
-  Stream<Route> findRoutes(StationType destinationType, Station station) {
+  Stream<Route> findRoutes(LocationType destinationType, Station station) {
     isFindingRoutes = true;
     Stream<Route> routeStream = Stream.concat(
       findRoutes(destinationType, station, StationNode::getLeft),
@@ -75,7 +75,7 @@ public class Line {
     return getBestRoutes(routeStream.toList());
   }
 
-  private Stream<Route> findRoutes(StationType destinationType, Station station, UnaryOperator<StationNode> successor) {
+  private Stream<Route> findRoutes(LocationType destinationType, Station station, UnaryOperator<StationNode> successor) {
     StationNode routeStartNode = Optional.ofNullable(nodeMap.get(station))
       .orElseThrow(() -> new RuntimeException("station " + station + " is not on this line"));
     StationNode routeNextNode = successor.apply(routeStartNode);
