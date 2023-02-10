@@ -1,13 +1,25 @@
-package ucc.team9.nanometro;
+package ucc.team9.nanometro.gfx;
+
+import ucc.team9.nanometro.model.service.ModelService;
+
+
+import java.util.List;
 
 public class Passenger {
     private Location.LocationType type; // destination type
+    public Location location;
+    public Location nextHop;
     public Passenger(Location.LocationType type) {
         this.type = type;
+        this.location = null;
     }
 
     public Location.LocationType getType() {
         return this.type;
+    }
+
+    public void setLocation(Location l) {
+        this.location = l;
     }
 
     @Override

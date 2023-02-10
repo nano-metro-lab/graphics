@@ -1,10 +1,11 @@
-package ucc.team9.nanometro;
+package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
+import ucc.team9.nanometro.Main;
 
 import java.util.ArrayList;
 import java.util.List;

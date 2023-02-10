@@ -1,6 +1,6 @@
 package ucc.team9.nanometro.model.core;
 
-import ucc.team9.nanometro.model.shared.StationType;
+import ucc.team9.nanometro.model.shared.LocationType;
 
 import java.util.*;
 import java.util.function.Function;
@@ -8,15 +8,15 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class Station {
-  private final StationType type;
+  private final LocationType type;
   private final List<Line> lines = new ArrayList<>();
   private final RoutesMap routesMap = new RoutesMap();
 
-  public Station(StationType type) {
+  public Station(LocationType type) {
     this.type = type;
   }
 
-  public StationType getType() {
+  public LocationType getType() {
     return type;
   }
 
@@ -28,7 +28,7 @@ public class Station {
     lines.remove(line);
   }
 
-  public Stream<Route> getRoutes(StationType destinationType) {
+  public Stream<Route> getRoutes(LocationType destinationType) {
     return routesMap.get(destinationType);
   }
 
@@ -42,7 +42,7 @@ public class Station {
     RoutesMap() {
     }
 
-    Stream<Route> get(StationType destinationType) {
+    Stream<Route> get(LocationType destinationType) {
       return Station.this.lines.stream()
         .filter(Predicate.not(Line::isFindingRoutes))
         .map(RoutesMap.this::getLineRoutesMap)
@@ -65,17 +65,17 @@ public class Station {
 
     private class LineRoutesMap {
       private final Line line;
-      private final Map<StationType, List<Route>> map = new HashMap<>();
+      private final Map<LocationType, List<Route>> map = new HashMap<>();
 
       LineRoutesMap(Line line) {
         this.line = line;
       }
 
-      static Function<LineRoutesMap, List<Route>> getting(StationType destinationType) {
+      static Function<LineRoutesMap, List<Route>> getting(LocationType destinationType) {
         return (lineRoutesMap) -> lineRoutesMap.get(destinationType);
       }
 
-      List<Route> get(StationType destinationType) {
+      List<Route> get(LocationType destinationType) {
         return Optional.ofNullable(map.get(destinationType))
           .orElseGet(() -> {
             List<Route> routes = line.findRoutes(destinationType, Station.this).toList();

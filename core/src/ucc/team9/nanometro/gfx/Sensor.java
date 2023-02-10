@@ -1,9 +1,10 @@
-package ucc.team9.nanometro;
+package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import ucc.team9.nanometro.Main;
 
 
 public class Sensor {

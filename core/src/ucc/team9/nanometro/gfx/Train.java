@@ -1,4 +1,4 @@
-package ucc.team9.nanometro;
+package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,9 +8,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import ucc.team9.nanometro.Main;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ucc.team9.nanometro.Main.modelService;
 
 public class Train {
     public enum Direction {
@@ -27,6 +30,9 @@ public class Train {
     final float stdTimeLimit = 0.1f;
     float runTime = 0f;
     BitmapFont debugFont;
+
+    Location thisLocation;
+    Location nextLocation;
 
     public void addPassenger(Passenger p) {
         this.passengerList.add(p);
@@ -63,7 +69,7 @@ public class Train {
         this.debugFont = font;
 
         //
-        passengerList.add(new Passenger(Location.LocationType.SQUARE));
+//        passengerList.add(new Passenger(Location.LocationType.SQUARE));
     }
 
     private void setUpBody() {
@@ -78,6 +84,7 @@ public class Train {
         this.trainBody.createFixture(trainFixtureDef);
         trainShape.dispose();
         this.trainBody.setUserData(this);
+//        this.trainBody.
     }
 
     public void draw(SpriteBatch batch) {
@@ -94,6 +101,40 @@ public class Train {
 
     }
 
+    public void test() {
+
+        List<Passenger> removeLst = new ArrayList<>();
+        System.out.println(passengerList);
+        System.out.println(thisLocation.passengerList);
+        for (Passenger p : this.passengerList) {
+            if (p.nextHop == thisLocation) {
+                removeLst.add(p);
+                if (p.getType() != thisLocation.type) {
+                    thisLocation.passengerList.add(p);
+                }
+            }
+        }
+        for (Passenger p : removeLst) {
+            passengerList.remove(p);
+        }
+        removeLst.removeAll(removeLst);
+
+        for (Passenger p : thisLocation.passengerList) {
+            List<Location> lst =  modelService.findDestinations(p.getType(), thisLocation, nextLocation);
+            System.out.println(lst);
+            if (!lst.isEmpty()) {
+//                thisLocation.passengerList.remove(p);
+                this.passengerList.add(p);
+                removeLst.add(p);
+                p.nextHop = lst.get(lst.size() - 1);
+            }
+        }
+        for (Passenger p : removeLst) {
+            thisLocation.passengerList.remove(p);
+        }
+
+    }
+
     public void dumbController() {
 //        Timer.schedule(new Timer.Task() {
 //            @Override
@@ -106,19 +147,28 @@ public class Train {
 
         runTime = 0f;
         if (line.getNextSection(section) == null && direction == Direction.DOWN) {
+            thisLocation = section.lower.location;
+            nextLocation = section.upper.location;
             section = section;
             direction = Direction.UP;
             progress = 0f;
         } else if (line.getPreviousSection(section) == null && direction == Direction.UP) {
+            thisLocation = section.upper.location;
+            nextLocation = section.lower.location;
             section = section;
             direction = Direction.DOWN;
             progress = 0f;
         } else {
             if (direction == Direction.DOWN) {
+                thisLocation = section.lower.location;
                 section = line.getNextSection(section);
+                nextLocation = section.lower.location;
                 progress = 0f;
             } else {
+                thisLocation = section.upper.location;
+
                 section = line.getPreviousSection(section);
+                nextLocation = section.upper.location;
                 progress = 0f;
             }
         }
@@ -139,6 +189,7 @@ public class Train {
             } else {
                 // ============== train go to next section ==============
                 dumbController();
+                test();
             }
         } else {
             float sectionTimeLimit = stdTimeLimit * section.path.approxLength();

@@ -7,6 +7,8 @@ It names Main, because this project uses libGDX's Main tutorial project as the b
 
 package ucc.team9.nanometro;
 
+import ucc.team9.nanometro.gfx.*;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import ucc.team9.nanometro.model.service.ModelService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,8 @@ public class Main extends ApplicationAdapter {
 	private Body MouseBox;
 
 	public static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
+
+//	world.s
 	private Line testLine;
 	public static List<Line> lineList = new ArrayList<Line>(5);
 	static List<Train> trainList = new ArrayList<Train>(5);
@@ -45,6 +50,7 @@ public class Main extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+//		world.setContactListener(new _Listener());
 
 		// Todo Input event listener
 
@@ -59,7 +65,7 @@ public class Main extends ApplicationAdapter {
 //		setInputProcessor();
 //		new MouseInputProcessor();
 		Gdx.input.setInputProcessor(new MouseInputProcessor());
-		createBox();
+		setup();
 
 	}
 
@@ -114,53 +120,68 @@ public class Main extends ApplicationAdapter {
 		});
 
 	}
-	private void createBox() {
+
+
+	public static ModelService modelService = ModelServiceFactory.getInstance();
+	private void setup() {
 		// Todo should wrap station and assign uuid to each obj
 		// Todo should implement simple BUS, to broadcast events to other components
+		// Camera 40 x 40
 
-		Location l1 = new Location(12, 9, Location.LocationType.SQUARE);
-		Location l2 = new Location(29, 20, Location.LocationType.CIRCLE);
-		Location l3 = new Location(20, 30, Location.LocationType.TRIANGLE);
-		Location l4 = new Location(29, 9, Location.LocationType.CIRCLE);
-		Location l5 = new Location(12, 35, Location.LocationType.CIRCLE);
-		Location l6 = new Location(5, 9, Location.LocationType.CIRCLE);
-		Location l7 = new Location(32, 30, Location.LocationType.CIRCLE);
-		Location l8 = new Location(17, 17, Location.LocationType.CIRCLE);
-		Location l9 = new Location(29, 2, Location.LocationType.CIRCLE);
+		Location l1 = new Location(4, 20, Location.LocationType.CIRCLE);
+		Location l2 = new Location(12, 20, Location.LocationType.CIRCLE);
+		Location l3 = new Location(20, 20, Location.LocationType.CIRCLE);
+		Location l4 = new Location(28, 20, Location.LocationType.CIRCLE);
+		Location l5 = new Location(36, 20, Location.LocationType.TRIANGLE);
+		Location l6 = new Location(12, 12, Location.LocationType.CIRCLE);
+		Location l7 = new Location(12, 4, Location.LocationType.SQUARE);
+		Location l8 = new Location(20, 12, Location.LocationType.TRIANGLE);
 
-		locationList.add(l1);
-		locationList.add(l2);
-		locationList.add(l3);
-		locationList.add(l4);
-		locationList.add(l5);
-		locationList.add(l6);
-		locationList.add(l7);
-		locationList.add(l8);
-		locationList.add(l9);
+		locationList = List.of(l1, l2, l3, l4, l5, l6, l7, l8);
 
-
-		Line line1 = new Line(l5, l3);
-		line1.addTail(l2);
+		Line line1 = new Line(l1, l2);
+		line1.addTail(l3);
 		line1.addTail(l4);
-		line1.addTail(l9);
+		line1.addTail(l5);
 //		line1.removeTail();
-		line1.removeMiddle(l4);
-
+//		line1.removeMiddle(l4);
 		this.lineList.add(line1);
 		this.trainList.add(new Train(line1, line1.sectionList.get(0), 0f));
 
 
-		Line line2 = new Line(l6, l2);
-//		line2.addTail(l1);
+
+		Line line2 = new Line(l2, l6);
 		line2.addTail(l7);
-		line2.addMiddle(l1, line2.getSection(l6, l2));
-		line2.addMiddle(l8, line2.getSection(l1, l2));
-
-
 		this.lineList.add(line2);
 		this.trainList.add(new Train(line2, line2.sectionList.get(0), 0f));
 
+		Line line3 = new Line(l3, l8);
+		this.trainList.add(new Train(line3, line3.sectionList.get(0), 0f));
+
 		shape.setProjectionMatrix(camera.combined);
+
+		// Model part
+
+
+		for (Location l : locationList) {
+			modelService.addStation(l, l.getType());
+		}
+
+		modelService.addLine(line1);
+		modelService.updateLine(line1, line1.getLocationList());
+
+		modelService.addLine(line2);
+		modelService.updateLine(line2, line2.getLocationList());
+
+		modelService.addLine(line3);
+		modelService.updateLine(line3, line3.getLocationList());
+
+
+		l1.addPassenger(new Passenger(Location.LocationType.SQUARE));
+
+
+
+
 
 	}
 
