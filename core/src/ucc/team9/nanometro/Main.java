@@ -11,19 +11,14 @@ import ucc.team9.nanometro.gfx.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import ucc.team9.nanometro.model.service.ModelService;
 
 import java.util.ArrayList;
@@ -33,14 +28,10 @@ public class Main extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
 	public static OrthographicCamera camera;
-	private Viewport viewport;
 	private Box2DDebugRenderer debugRenderer;
-	private Body MouseBox;
 
 	public static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 
-//	world.s
-	private Line testLine;
 	public static List<Line> lineList = new ArrayList<Line>(5);
 	static List<Train> trainList = new ArrayList<Train>(5);
 	static List<Location> locationList = new ArrayList<>(10);
@@ -59,70 +50,15 @@ public class Main extends ApplicationAdapter {
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 40, 40);
-		viewport = new FillViewport(900, 900, camera);
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
-//		setInputProcessor();
-//		new MouseInputProcessor();
-		Gdx.input.setInputProcessor(new MouseInputProcessor());
+		shape.setProjectionMatrix(camera.combined);
+		Gdx.input.setInputProcessor(new _MouseInputProcessor());
 		setup();
 
 	}
 
-	private void setInputProcessor() {
-		Gdx.input.setInputProcessor(new InputProcessor() {
-			@Override
-			public boolean keyDown(int keycode) {
-				return false;
-			}
-
-			@Override
-			public boolean keyUp(int keycode) {
-				return false;
-			}
-
-			@Override
-			public boolean keyTyped(char character) {
-				return false;
-			}
-
-			@Override
-			public boolean touchDown(int x, int y, int pointer, int button) {
-				Vector3 mousePosition = new Vector3(x, y, 0);
-				camera.unproject(mousePosition);
-//				viewport.
-				// Todo
-				return true;
-			}
-
-			@Override
-			public boolean touchUp(int x, int y, int pointer, int button) {
-				return false;
-			}
-
-			@Override
-			public boolean touchDragged(int x, int y, int pointer) {
-				return false;
-			}
-
-			@Override
-			public boolean mouseMoved(int x, int y) {
-				Vector3 mousePosition = new Vector3(x, y, 0);
-				camera.unproject(mousePosition);
-				return true;
-			}
-
-
-			@Override
-			public boolean scrolled(float amountX, float amountY) {
-				return false;
-			}
-		});
-
-	}
-
-
-	public static ModelService modelService = ModelServiceFactory.getInstance();
+	public static ModelService<Location, Line> modelService = ModelServiceFactory.getInstance();
 	private void setup() {
 		// Todo should wrap station and assign uuid to each obj
 		// Todo should implement simple BUS, to broadcast events to other components
@@ -143,26 +79,18 @@ public class Main extends ApplicationAdapter {
 		line1.addTail(l3);
 		line1.addTail(l4);
 		line1.addTail(l5);
-//		line1.removeTail();
-//		line1.removeMiddle(l4);
-		this.lineList.add(line1);
-		this.trainList.add(new Train(line1, line1.sectionList.get(0), 0f));
-
-
+		lineList.add(line1);
+		trainList.add(new Train(line1, line1.sectionList.get(0), 0f));
 
 		Line line2 = new Line(l2, l6);
 		line2.addTail(l7);
-		this.lineList.add(line2);
-		this.trainList.add(new Train(line2, line2.sectionList.get(0), 0f));
+		lineList.add(line2);
+		trainList.add(new Train(line2, line2.sectionList.get(0), 0f));
 
 		Line line3 = new Line(l3, l8);
-		this.trainList.add(new Train(line3, line3.sectionList.get(0), 0f));
-
-		shape.setProjectionMatrix(camera.combined);
+		trainList.add(new Train(line3, line3.sectionList.get(0), 0f));
 
 		// Model part
-
-
 		for (Location l : locationList) {
 			modelService.addStation(l, l.getType());
 		}
@@ -176,12 +104,9 @@ public class Main extends ApplicationAdapter {
 		modelService.addLine(line3);
 		modelService.updateLine(line3, line3.getLocationList());
 
-
 		l1.addPassenger(new Passenger(Location.LocationType.SQUARE));
-
-
-
-
+		l1.addPassenger(new Passenger(Location.LocationType.CIRCLE));
+		l1.addPassenger(new Passenger(Location.LocationType.TRIANGLE));
 
 	}
 
@@ -212,7 +137,6 @@ public class Main extends ApplicationAdapter {
 		for (Location l : locationList) {
 			l.draw(batch);
 		}
-
 
 		world.step(1/60f, 6, 2);
 	}

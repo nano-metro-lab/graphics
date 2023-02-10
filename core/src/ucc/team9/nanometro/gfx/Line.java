@@ -7,6 +7,8 @@ import ucc.team9.nanometro.Main;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ucc.team9.nanometro.Main.modelService;
+
 public class Line {
     public final List<Station> stationList;
     public final List<Section> sectionList;
@@ -81,12 +83,16 @@ public class Line {
             sectionList.get(sectionList.size() - 1).destroy();
             sectionList.remove(sectionList.size() - 1);
         }
+
+        modelService.updateLine(this, getLocationList());
     }
     public void addHead(Location l) {
         Station s = new Station(this, l);
         Station f = stationList.get(stationList.size() - 1);
         stationList.add(0, s);
         sectionList.add(0, new Section(this, s, f));
+
+        modelService.updateLine(this, getLocationList());
     }
 
     public void removeHead() {
@@ -98,6 +104,8 @@ public class Line {
             sectionList.get(0).destroy();
             sectionList.remove(0);
         }
+
+        modelService.updateLine(this, getLocationList());
     }
 
     public void addMiddle(Location l, Section s) {
@@ -109,6 +117,8 @@ public class Line {
         sectionList.add(sectionList.indexOf(s), new Section(this, middle, bLower));
         sectionList.remove(s);
         s.destroy();
+
+        modelService.updateLine(this, getLocationList());
     }
 
     public void removeMiddle(Location l) {
@@ -136,6 +146,8 @@ public class Line {
         sectionList.remove(b);
         a.destroy();
         b.destroy();
+
+        modelService.updateLine(this, getLocationList());
     }
 
 
@@ -148,20 +160,12 @@ public class Line {
             s.destroy();
         }
         sectionList.removeAll(sectionList);
+
+        modelService.updateLine(this, getLocationList());
     }
-
-
-//    public Station getStation (Location l) {
-//        for (Station s : this.stationList) {
-//            if (s.getLocation() == l) return s;
-////            else return null;
-//        }
-//        return null;
-//    }
 
     public boolean hasSection(Section s) {
         return this.sectionList.contains(s);
     }
-
 
 }

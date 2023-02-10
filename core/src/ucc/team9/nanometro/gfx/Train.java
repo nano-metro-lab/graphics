@@ -30,17 +30,8 @@ public class Train {
     final float stdTimeLimit = 0.1f;
     float runTime = 0f;
     BitmapFont debugFont;
-
     Location thisLocation;
     Location nextLocation;
-
-    public void addPassenger(Passenger p) {
-        this.passengerList.add(p);
-    }
-
-    public void removePassenger(Passenger p) {
-        this.passengerList.remove(p);
-    }
 
     public void stopTrain() {
         stopSignal = 1;
@@ -67,9 +58,6 @@ public class Train {
         BitmapFont font = generator.generateFont(parameter); // font size 12 pixels
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
         this.debugFont = font;
-
-        //
-//        passengerList.add(new Passenger(Location.LocationType.SQUARE));
     }
 
     private void setUpBody() {
@@ -101,11 +89,10 @@ public class Train {
 
     }
 
-    public void test() {
-
+    public void update() {
         List<Passenger> removeLst = new ArrayList<>();
-        System.out.println(passengerList);
-        System.out.println(thisLocation.passengerList);
+//        System.out.println(passengerList);
+//        System.out.println(thisLocation.passengerList);
         for (Passenger p : this.passengerList) {
             if (p.nextHop == thisLocation) {
                 removeLst.add(p);
@@ -121,9 +108,8 @@ public class Train {
 
         for (Passenger p : thisLocation.passengerList) {
             List<Location> lst =  modelService.findDestinations(p.getType(), thisLocation, nextLocation);
-            System.out.println(lst);
+//            System.out.println(lst);
             if (!lst.isEmpty()) {
-//                thisLocation.passengerList.remove(p);
                 this.passengerList.add(p);
                 removeLst.add(p);
                 p.nextHop = lst.get(lst.size() - 1);
@@ -189,7 +175,7 @@ public class Train {
             } else {
                 // ============== train go to next section ==============
                 dumbController();
-                test();
+                update();
             }
         } else {
             float sectionTimeLimit = stdTimeLimit * section.path.approxLength();
