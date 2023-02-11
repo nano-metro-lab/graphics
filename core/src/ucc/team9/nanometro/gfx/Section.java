@@ -33,7 +33,7 @@ public class Section {
     }
 
     public void generateSamples() {
-        int sampleNum = (int) (path.approxLength() / 0.5f);
+        int sampleNum = (int) (path.approxLength() / 0.1f);
         for (int i = 0; i < sampleNum; i++) {
             Vector2 j = new Vector2();
             path.valueAt(j, ((float)i)/((float)sampleNum - 1));
@@ -52,7 +52,7 @@ public class Section {
             shape.setProjectionMatrix(camera.combined);
             shape.begin(ShapeRenderer.ShapeType.Filled);
             shape.setColor(Color.valueOf(this.line.colour));
-            shape.rectLine(sampleList.get(i) , sampleList.get(i + 1), 0.6f);
+            shape.rectLine(sampleList.get(i) , sampleList.get(i + 1), 0.7f);
 //            shape.line(sampleList.get(i) , sampleList.get(i + 1));
             shape.end();
         }

@@ -147,7 +147,7 @@ public class Main extends ApplicationAdapter {
 		for (Line line : lineList) {
 			line.draw(shape);
 		}
-		debugRenderer.render(world, camera.combined);
+//		debugRenderer.render(world, camera.combined);
 		for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
 			train.run();
