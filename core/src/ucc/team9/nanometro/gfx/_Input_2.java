@@ -86,11 +86,11 @@ public class _Input_2 implements InputProcessor {
     }
 
     public boolean scrolled (float amountX, float amountY) {
-        float w = camera.viewportWidth;
-        float h = camera.viewportHeight;
-
-
-        camera.setToOrtho(false, w + amountY+ amountY+ amountY, h + amountY+ amountY+ amountY);
+//        float w = camera.viewportWidth;
+//        float h = camera.viewportHeight;
+//
+//
+//        camera.setToOrtho(false, w + amountY+ amountY+ amountY, h + amountY+ amountY+ amountY);
 
         return false;
     }

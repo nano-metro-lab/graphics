@@ -25,7 +25,6 @@ public class GameScreen implements Screen {
 
     public static OrthographicCamera camera;
     public static ScreenViewport viewport;
-    private Box2DDebugRenderer debugRenderer;
     public static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
     public static List<Line> lineList = new ArrayList<Line>(5);
     static List<Train> trainList = new ArrayList<Train>(5);
@@ -39,13 +38,13 @@ public class GameScreen implements Screen {
     public GameScreen(NanoMetro game) {
         this.game = game;
 
-        debugRenderer = new Box2DDebugRenderer();
+
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 40, 40);
-//		viewport = new ScreenViewport();
-//		viewport.setUnitsPerPixel(0.04f);
-//		viewport.apply();
+		viewport = new ScreenViewport();
+		viewport.setUnitsPerPixel(0.04f);
+		viewport.apply();
 
         game.batch = new SpriteBatch();
         game.shape = new ShapeRenderer();
@@ -137,7 +136,7 @@ public class GameScreen implements Screen {
         for (Line line : lineList) {
             line.draw(game.shape);
         }
-//		debugRenderer.render(world, camera.combined);
+//		game.debugRenderer.render(world, camera.combined);
         for (Train train : trainList) {
 //			Gdx.gl.glLineWidth(5);
             train.run();
@@ -145,6 +144,7 @@ public class GameScreen implements Screen {
         }
         for (Location l : locationList) {
             l.drawDebug(game.batch);
+            l.draw(game.batch);
         }
 
         world.step(1/60f, 6, 2);
@@ -154,7 +154,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height, true);
     }
 
     @Override

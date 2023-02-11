@@ -15,13 +15,11 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 import ucc.team9.nanometro.GameScreen;
 
-import static ucc.team9.nanometro.GameScreen.camera;
-import static ucc.team9.nanometro.GameScreen.world;
-import static ucc.team9.nanometro.GameScreen.modelService;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+
+import static ucc.team9.nanometro.GameScreen.*;
 
 public class Location {
     public enum LocationType implements ucc.team9.nanometro.model.shared.LocationType {
@@ -104,14 +102,16 @@ public class Location {
         batch.begin();
         Vector3 p = new Vector3(this.locationBody.getWorldCenter().x, this.locationBody.getWorldCenter().y, 0);
         camera.project(p);
-        debugFont.draw(batch, type.toString() + passengerList.toString(), p.x,p.y);
+        debugFont.draw(batch, passengerList.toString(), p.x,p.y);
         batch.end();
     }
 
     public void draw(SpriteBatch batch) {
         batch.begin();
-        batch.setProjectionMatrix(camera.combined);
-        batch.draw(locationImage, this.position.x, this.position.y);
+        Vector3 v = new Vector3(this.position.x, this.position.y, 0);
+        camera.project(v);
+//        batch.setProjectionMatrix(camera.combined);
+        batch.draw(locationImage, v.x - 50f, v.y  - 50f, 100f, 100f);
         batch.end();
     }
 
