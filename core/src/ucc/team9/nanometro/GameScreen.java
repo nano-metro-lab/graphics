@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ucc.team9.nanometro.gfx.*;
+import ucc.team9.nanometro.model.ModelServiceFactory;
 import ucc.team9.nanometro.model.service.ModelService;
 
 import java.util.ArrayList;
