@@ -161,7 +161,7 @@ public class Train {
     }
 
     public void run() {
-        if (progress > 1f) {
+        if (progress >= 1f) {
             if (stopSignal != 0) {
                 // ============== train stop at station ==============
                 Vector2 bodyPosition = trainBody.getWorldCenter();
@@ -187,7 +187,9 @@ public class Train {
             if (this.direction == Direction.DOWN) {
                 section.path.valueAt(targetPosition, progress);
             } else {
-                section.path.valueAt(targetPosition, 1 - progress);
+                section.path.valueAt(targetPosition, 1 - progress > 0 ? 1 - progress : 0.01f); // Todo quick fix, should investigate 0
+//                System.out.println(1 - progress);
+
             }
             Vector2 positionDelta = (targetPosition.cpy().sub(bodyPosition));
             this.trainBody.setLinearVelocity(positionDelta.scl(10));

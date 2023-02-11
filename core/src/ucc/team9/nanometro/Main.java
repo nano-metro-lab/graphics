@@ -105,6 +105,7 @@ public class Main extends ApplicationAdapter {
 		lineList.add(line3);
 		line3.colour = "#f03024";
 		trainList.add(new Train(line3, line3.sectionList.get(0), 0f));
+		testLine = line1;
 
 		// Model part
 		for (Location l : locationList) {
@@ -128,6 +129,7 @@ public class Main extends ApplicationAdapter {
 
 	private Train testTrain;
 	private Section testSection;
+	private Line testLine;
 
 	@Override
 	public void render() {
@@ -156,6 +158,7 @@ public class Main extends ApplicationAdapter {
 		}
 
 		world.step(1/60f, 6, 2);
+//		System.out.println(testLine);
 	}
 
 	@Override

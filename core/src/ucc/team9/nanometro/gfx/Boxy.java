@@ -42,7 +42,11 @@ public class Boxy {
     public float ratio;
     public void valueAt(Vector2 v, float t) {
         ratio = (startingPoint.dst(controlPoint) / (startingPoint.dst(controlPoint) + endingPoint.dst(controlPoint)));
-        if (t < ratio) {
+        if (ratio == 1) {
+            v.set(startingPoint.cpy().lerp(endingPoint, t));
+            return;
+        }
+        if (t <= ratio) {
             float r = this.approxLength() * t / startingPoint.dst(controlPoint);
             v.set(startingPoint.cpy().lerp(controlPoint, r));
         } else {
