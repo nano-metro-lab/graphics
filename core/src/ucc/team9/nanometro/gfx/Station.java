@@ -8,11 +8,22 @@ public class Station {
     Section upper;
     Section lower;
     Location location;
+    Vector2 platform;
     Line line;
 
 
     public Vector2 getPosition() {
         return this.location.getPosition();
+    }
+
+    public Vector2 getPlatform() {
+        if (this.platform == null) {
+            // request platform
+            this.platform = this.location.requestPlatform(); // Todo null case
+            return this.platform;
+        } else {
+            return this.platform;
+        }
     }
 
     public Station(Line line, Location location) {

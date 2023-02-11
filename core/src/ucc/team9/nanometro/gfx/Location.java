@@ -26,6 +26,17 @@ public class Location {
         return this.type;
     }
 
+    public Vector2 requestPlatform() {
+        if (this.platformPool.isEmpty()) {
+            return null;
+        }
+        Vector2 v = this.platformPool.get(0);
+        this.platformPool.remove(v);
+        return v;
+    }
+
+
+    private List<Vector2> platformPool = new ArrayList<>();
     private Vector2 position;
     Body locationBody;
     BitmapFont debugFont;
@@ -53,6 +64,11 @@ public class Location {
         locationShape.dispose();
         this.locationBody.setUserData(this);
         this.locationBody.setTransform(position.x, position.y, 0);
+
+        Vector2 platformOffset = new Vector2(0.6f, 0.6f);
+        this.platformPool.add(this.position);
+        this.platformPool.add(this.position.cpy().add(platformOffset));
+        this.platformPool.add(this.position.cpy().add(platformOffset).add(platformOffset));
 
 
         // debug font

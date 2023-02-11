@@ -15,8 +15,12 @@ public class Boxy {
     Vector2 cornerPoint;
 
     public Boxy(Station upper, Station lower) {
-        startingPoint = upper.getPosition();
-        endingPoint = lower.getPosition();
+//        startingPoint = upper.getPosition();
+//        endingPoint = lower.getPosition();
+
+        startingPoint = upper.getPlatform();
+        endingPoint = lower.getPlatform();
+
 
         cornerPoint = new Vector2(startingPoint.x, endingPoint.y);
         if (startingPoint.dst(cornerPoint) >= endingPoint.dst(cornerPoint)) {

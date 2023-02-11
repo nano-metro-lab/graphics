@@ -95,7 +95,9 @@ public class Main extends ApplicationAdapter {
 		lineList.add(line1);
 		trainList.add(new Train(line1, line1.sectionList.get(0), 0f));
 
-		Line line2 = new Line(l2, l6);
+		Line line2 = new Line(l4, l6);
+//		line2.addTail(l2);
+//		line2.addTail(l6);
 		line2.addTail(l7);
 		line2.colour = "#1c4094";
 		lineList.add(line2);
