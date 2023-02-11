@@ -9,6 +9,9 @@ package ucc.team9.nanometro;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import ucc.team9.nanometro.gfx.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -30,6 +33,7 @@ public class Main extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
 	public static OrthographicCamera camera;
+	public static ScreenViewport viewport;
 	private Box2DDebugRenderer debugRenderer;
 	public static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
 	public static List<Line> lineList = new ArrayList<Line>(5);
@@ -49,6 +53,10 @@ public class Main extends ApplicationAdapter {
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 40, 40);
+//		viewport = new ScreenViewport();
+//		viewport.setUnitsPerPixel(0.04f);
+//		viewport.apply();
+
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		shape.setProjectionMatrix(camera.combined);
@@ -67,15 +75,6 @@ public class Main extends ApplicationAdapter {
 		// Todo should wrap station and assign uuid to each obj
 		// Todo should implement simple BUS, to broadcast events to other components
 		// Camera 40 x 40
-
-//		Location l1 = new Location(4, 20, Location.LocationType.CIRCLE);
-//		Location l2 = new Location(12, 20, Location.LocationType.CIRCLE);
-//		Location l3 = new Location(20, 20, Location.LocationType.CIRCLE);
-//		Location l4 = new Location(28, 20, Location.LocationType.CIRCLE);
-//		Location l5 = new Location(36, 20, Location.LocationType.TRIANGLE);
-//		Location l6 = new Location(12, 12, Location.LocationType.CIRCLE);
-//		Location l7 = new Location(12, 4, Location.LocationType.SQUARE);
-//		Location l8 = new Location(20, 12, Location.LocationType.TRIANGLE);
 
 		Location l1 = new Location(4, 35, Location.LocationType.CIRCLE);
 		Location l2 = new Location(12, 20, Location.LocationType.CIRCLE);
@@ -155,7 +154,7 @@ public class Main extends ApplicationAdapter {
 			train.draw(batch);
 		}
 		for (Location l : locationList) {
-			l.draw(batch);
+			l.drawDebug(batch);
 		}
 
 		world.step(1/60f, 6, 2);

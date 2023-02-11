@@ -97,15 +97,20 @@ public class Location {
         ///
 
         locationImage = new Texture(Gdx.files.internal(imgs.get(this.type)));
+//        locationImage.
 
+    }
+
+    public void drawDebug(SpriteBatch batch) {
+        batch.begin();
+        Vector3 p = new Vector3(this.locationBody.getWorldCenter().x, this.locationBody.getWorldCenter().y, 0);
+        Main.camera.project(p);
+        debugFont.draw(batch, type.toString() + passengerList.toString(), p.x,p.y);
+        batch.end();
     }
 
     public void draw(SpriteBatch batch) {
         batch.begin();
-
-        Vector3 p = new Vector3(this.locationBody.getWorldCenter().x, this.locationBody.getWorldCenter().y, 0);
-        Main.camera.project(p);
-        debugFont.draw(batch, type.toString() + passengerList.toString(), p.x,p.y);
         batch.setProjectionMatrix(camera.combined);
         batch.draw(locationImage, this.position.x, this.position.y);
         batch.end();
