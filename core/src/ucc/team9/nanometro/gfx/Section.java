@@ -5,17 +5,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import ucc.team9.nanometro.Main;
+
+import static ucc.team9.nanometro.GameScreen.camera;
+import static ucc.team9.nanometro.GameScreen.world;
+import static ucc.team9.nanometro.GameScreen.modelService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Section {
-
-    static final World world = Main.world;
-    static final OrthographicCamera camera = Main.camera;
-
-
     Line line;
     Station upper;
     Station lower;

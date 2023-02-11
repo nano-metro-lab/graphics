@@ -8,7 +8,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import ucc.team9.nanometro.Main;
+
+import static ucc.team9.nanometro.GameScreen.camera;
+import static ucc.team9.nanometro.GameScreen.world;
+import static ucc.team9.nanometro.GameScreen.modelService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +23,6 @@ public class _Input_2 implements InputProcessor {
 
     private Vector2 v;
     private Vector2 offset = new Vector2(0, 0);
-
-    static final World world = Main.world;
-    static final OrthographicCamera camera = Main.camera;
 
     public _Input_2(Body mouseBox) {
         super();

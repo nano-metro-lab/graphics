@@ -5,7 +5,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
-import ucc.team9.nanometro.Main;
+import ucc.team9.nanometro.GameScreen;
+
+import static ucc.team9.nanometro.GameScreen.camera;
+import static ucc.team9.nanometro.GameScreen.world;
+import static ucc.team9.nanometro.GameScreen.modelService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +46,9 @@ public class _Input_1 implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
         // check mouse box collision
         Vector3 mousePosition = new Vector3(x, y, 0);
-        Main.camera.unproject(mousePosition);
+        camera.unproject(mousePosition);
         final List<Fixture> fixtureList = new ArrayList<>(5);
-        Main.world.QueryAABB(new QueryCallback() {
+        world.QueryAABB(new QueryCallback() {
             @Override
             public boolean reportFixture(Fixture fixture) {
                 fixtureList.add(fixture);
@@ -65,9 +69,9 @@ public class _Input_1 implements InputProcessor {
 
     public boolean touchUp (int x, int y, int pointer, int button) {
         Vector3 mousePosition = new Vector3(x, y, 0);
-        Main.camera.unproject(mousePosition);
+        camera.unproject(mousePosition);
         final List<Fixture> fixtureList = new ArrayList<>(5);
-        Main.world.QueryAABB(new QueryCallback() {
+        world.QueryAABB(new QueryCallback() {
             @Override
             public boolean reportFixture(Fixture fixture) {
                 fixtureList.add(fixture);
@@ -78,7 +82,7 @@ public class _Input_1 implements InputProcessor {
             if (f.getBody().getUserData() instanceof Location) {
                 Location o = (Location) f.getBody().getUserData();
                 this.endLocation = o;
-                for (Line l : Main.lineList) {
+                for (Line l : GameScreen.lineList) {
                     if (l.hasSection(this.startSection)) {
                         l.addMiddle(this.endLocation, this.startSection);
                     }

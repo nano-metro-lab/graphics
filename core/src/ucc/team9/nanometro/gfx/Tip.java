@@ -4,7 +4,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import ucc.team9.nanometro.Main;
+
+import static ucc.team9.nanometro.GameScreen.camera;
+import static ucc.team9.nanometro.GameScreen.world;
+import static ucc.team9.nanometro.GameScreen.modelService;
 
 public class Tip {
 

@@ -1,8 +1,10 @@
 package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.graphics.g3d.Model;
-import ucc.team9.nanometro.Main;
-import ucc.team9.nanometro.model.service.ModelService;
+
+import static ucc.team9.nanometro.GameScreen.camera;
+import static ucc.team9.nanometro.GameScreen.world;
+import static ucc.team9.nanometro.GameScreen.modelService;
 
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -10,7 +12,6 @@ import java.util.List;
 
 public class _Listener implements ContactListener {
 
-    final ModelService modelService = Main.modelService;
     @Override
     public void beginContact(Contact contact) {
 //        Body a=contact.getFixtureA().getBody();

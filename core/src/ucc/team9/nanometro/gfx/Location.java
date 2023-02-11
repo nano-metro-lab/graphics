@@ -13,18 +13,17 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
-import ucc.team9.nanometro.Main;
+import ucc.team9.nanometro.GameScreen;
 
+import static ucc.team9.nanometro.GameScreen.camera;
+import static ucc.team9.nanometro.GameScreen.world;
+import static ucc.team9.nanometro.GameScreen.modelService;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
 public class Location {
-
-    static final World world = Main.world;
-    static final OrthographicCamera camera = Main.camera;
-
     public enum LocationType implements ucc.team9.nanometro.model.shared.LocationType {
         CIRCLE, TRIANGLE, SQUARE, PREVIEW
     }
@@ -67,7 +66,7 @@ public class Location {
         this.type = type;
 
         BodyDef locationBodyDef = new BodyDef();
-        this.locationBody = Main.world.createBody(locationBodyDef);
+        this.locationBody = world.createBody(locationBodyDef);
         CircleShape locationShape = new CircleShape();
         locationShape.setRadius(2f);
         this.locationBody.createFixture(locationShape, 0.0f);
@@ -104,7 +103,7 @@ public class Location {
     public void drawDebug(SpriteBatch batch) {
         batch.begin();
         Vector3 p = new Vector3(this.locationBody.getWorldCenter().x, this.locationBody.getWorldCenter().y, 0);
-        Main.camera.project(p);
+        camera.project(p);
         debugFont.draw(batch, type.toString() + passengerList.toString(), p.x,p.y);
         batch.end();
     }
@@ -116,8 +115,7 @@ public class Location {
         batch.end();
     }
 
-    public void destroy() {
-        Main.world.destroyBody(this.locationBody);
+    public void destroy() {world.destroyBody(this.locationBody);
     }
 
     public Vector2 getPosition() {

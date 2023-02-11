@@ -8,18 +8,19 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import ucc.team9.nanometro.Main;
+
+import static ucc.team9.nanometro.GameScreen.camera;
+import static ucc.team9.nanometro.GameScreen.world;
+import static ucc.team9.nanometro.GameScreen.modelService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static ucc.team9.nanometro.Main.modelService;
 
 public class Train {
     public enum Direction {
         UP, DOWN
     }
-    static World world = Main.world;
     Body trainBody;
     List<Passenger> passengerList = new ArrayList<>();
     Line line;
@@ -79,7 +80,7 @@ public class Train {
         batch.begin();
 
         Vector3 p = new Vector3(this.trainBody.getWorldCenter().x, this.trainBody.getWorldCenter().y, 0);
-        Main.camera.project(p);
+        camera.project(p);
         debugFont.draw(batch, passengerList.toString(), p.x,p.y);
 
         batch.end();
