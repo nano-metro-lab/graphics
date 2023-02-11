@@ -68,14 +68,23 @@ public class Main extends ApplicationAdapter {
 		// Todo should implement simple BUS, to broadcast events to other components
 		// Camera 40 x 40
 
-		Location l1 = new Location(4, 20, Location.LocationType.CIRCLE);
+//		Location l1 = new Location(4, 20, Location.LocationType.CIRCLE);
+//		Location l2 = new Location(12, 20, Location.LocationType.CIRCLE);
+//		Location l3 = new Location(20, 20, Location.LocationType.CIRCLE);
+//		Location l4 = new Location(28, 20, Location.LocationType.CIRCLE);
+//		Location l5 = new Location(36, 20, Location.LocationType.TRIANGLE);
+//		Location l6 = new Location(12, 12, Location.LocationType.CIRCLE);
+//		Location l7 = new Location(12, 4, Location.LocationType.SQUARE);
+//		Location l8 = new Location(20, 12, Location.LocationType.TRIANGLE);
+
+		Location l1 = new Location(4, 35, Location.LocationType.CIRCLE);
 		Location l2 = new Location(12, 20, Location.LocationType.CIRCLE);
 		Location l3 = new Location(20, 20, Location.LocationType.CIRCLE);
-		Location l4 = new Location(28, 20, Location.LocationType.CIRCLE);
-		Location l5 = new Location(36, 20, Location.LocationType.TRIANGLE);
-		Location l6 = new Location(12, 12, Location.LocationType.CIRCLE);
-		Location l7 = new Location(12, 4, Location.LocationType.SQUARE);
-		Location l8 = new Location(20, 12, Location.LocationType.TRIANGLE);
+		Location l4 = new Location(28, 17, Location.LocationType.CIRCLE);
+		Location l5 = new Location(36, 8, Location.LocationType.TRIANGLE);
+		Location l6 = new Location(9, 15, Location.LocationType.CIRCLE);
+		Location l7 = new Location(9, 7, Location.LocationType.SQUARE);
+		Location l8 = new Location(38, 35, Location.LocationType.TRIANGLE);
 
 		locationList = List.of(l1, l2, l3, l4, l5, l6, l7, l8);
 
