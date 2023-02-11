@@ -7,6 +7,8 @@ It names Main, because this project uses libGDX's Main tutorial project as the b
 
 package ucc.team9.nanometro;
 
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import ucc.team9.nanometro.gfx.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -29,13 +31,10 @@ public class Main extends ApplicationAdapter {
 	private ShapeRenderer shape;
 	public static OrthographicCamera camera;
 	private Box2DDebugRenderer debugRenderer;
-
 	public static World world = new World(new Vector2(0, 0), false); // non-gravity Todo
-
 	public static List<Line> lineList = new ArrayList<Line>(5);
 	static List<Train> trainList = new ArrayList<Train>(5);
 	static List<Location> locationList = new ArrayList<>(10);
-
 	public Main() {
 	}
 
@@ -53,7 +52,12 @@ public class Main extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
 		shape.setProjectionMatrix(camera.combined);
-		Gdx.input.setInputProcessor(new _MouseInputProcessor());
+		InputProcessor input1 = new _Input_1();
+		InputProcessor input2 = new _Input_2();
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(input1);
+//		inputMultiplexer.addProcessor(input2);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 		setup();
 
 	}

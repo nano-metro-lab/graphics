@@ -10,9 +10,9 @@ import ucc.team9.nanometro.Main;
 import java.util.ArrayList;
 import java.util.List;
 
-public class _MouseInputProcessor implements InputProcessor {
+public class _Input_1 implements InputProcessor {
 
-    public _MouseInputProcessor(Body mouseBox) {
+    public _Input_1(Body mouseBox) {
         super();
         this.mouseBox = mouseBox;
     }
@@ -20,7 +20,7 @@ public class _MouseInputProcessor implements InputProcessor {
     private Section startSection = null;
     private Location endLocation = null;
 
-    public _MouseInputProcessor() {
+    public _Input_1() {
 
     }
 
@@ -58,8 +58,8 @@ public class _MouseInputProcessor implements InputProcessor {
                 break;
             }
         }
-        System.out.println(this.startSection);
-        System.out.println(this.endLocation);
+//        System.out.println(this.startSection);
+//        System.out.println(this.endLocation);
         return true;
     }
 
@@ -86,8 +86,8 @@ public class _MouseInputProcessor implements InputProcessor {
                 break;
             }
         }
-        System.out.println(this.startSection);
-        System.out.println(this.endLocation);
+//        System.out.println(this.startSection);
+//        System.out.println(this.endLocation);
         return true;
     }
 

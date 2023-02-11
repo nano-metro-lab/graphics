@@ -1,6 +1,7 @@
 package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -10,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Section {
+
+    static final World world = Main.world;
+    static final OrthographicCamera camera = Main.camera;
+
+
     Line line;
     Station upper;
     Station lower;
@@ -43,14 +49,13 @@ public class Section {
     public void draw(ShapeRenderer shape) {
         int k = this.sampleList.size();
         for (int i = 0; i < k - 1; i++) {
+            shape.setProjectionMatrix(camera.combined);
             shape.begin(ShapeRenderer.ShapeType.Line);
             shape.setColor(Color.BLUE);
-            shape.line(sampleList.get(i), sampleList.get(i + 1));
+            shape.line(sampleList.get(i) , sampleList.get(i + 1));
             shape.end();
         }
     }
-
-    private static final World world = Main.world;
 
 //    public void update() {
 //        this.generateSamples();
