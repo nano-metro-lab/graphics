@@ -2,6 +2,8 @@ package ucc.team9.nanometro.gfx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -10,17 +12,24 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.World;
 import ucc.team9.nanometro.Main;
 
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class Location {
 
+    static final World world = Main.world;
+    static final OrthographicCamera camera = Main.camera;
+
     public enum LocationType implements ucc.team9.nanometro.model.shared.LocationType {
         CIRCLE, TRIANGLE, SQUARE, PREVIEW
     }
+
+    public Hashtable<LocationType, String> imgs = new Hashtable<>();
 
     public LocationType getType() {
         return this.type;
@@ -42,6 +51,7 @@ public class Location {
     BitmapFont debugFont;
     List<Passenger> passengerList = new ArrayList<>(30);
     LocationType type;
+    Texture locationImage;
 
     public void addPassenger(Passenger p) {
         this.passengerList.add(p);
@@ -80,6 +90,14 @@ public class Location {
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
         this.debugFont = font;
 
+        //
+        imgs.put(LocationType.CIRCLE, "./CIRCLE.png");
+        imgs.put(LocationType.TRIANGLE, "./TRIANGLE.png");
+        imgs.put(LocationType.SQUARE, "./SQUARE.png");
+        ///
+
+        locationImage = new Texture(Gdx.files.internal(imgs.get(this.type)));
+
     }
 
     public void draw(SpriteBatch batch) {
@@ -88,7 +106,8 @@ public class Location {
         Vector3 p = new Vector3(this.locationBody.getWorldCenter().x, this.locationBody.getWorldCenter().y, 0);
         Main.camera.project(p);
         debugFont.draw(batch, type.toString() + passengerList.toString(), p.x,p.y);
-
+        batch.setProjectionMatrix(camera.combined);
+        batch.draw(locationImage, this.position.x, this.position.y);
         batch.end();
     }
 

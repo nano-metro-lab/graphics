@@ -55,8 +55,8 @@ public class Main extends ApplicationAdapter {
 		InputProcessor input1 = new _Input_1();
 		InputProcessor input2 = new _Input_2();
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(input1);
-//		inputMultiplexer.addProcessor(input2);
+//		inputMultiplexer.addProcessor(input1);
+		inputMultiplexer.addProcessor(input2);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		setup();
 
