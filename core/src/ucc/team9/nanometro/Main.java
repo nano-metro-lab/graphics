@@ -88,10 +88,13 @@ public class Main extends ApplicationAdapter {
 
 		Line line2 = new Line(l2, l6);
 		line2.addTail(l7);
+		line2.colour = "#1c4094";
 		lineList.add(line2);
 		trainList.add(new Train(line2, line2.sectionList.get(0), 0f));
 
 		Line line3 = new Line(l3, l8);
+		lineList.add(line3);
+		line3.colour = "#f03024";
 		trainList.add(new Train(line3, line3.sectionList.get(0), 0f));
 
 		// Model part
@@ -125,7 +128,8 @@ public class Main extends ApplicationAdapter {
 		// of the color to be used to clear the screen.
 //		ScreenUtils.clear(0, 0, 0.2f, 1);
 //		ScreenUtils.clear(Color.valueOf("#002B4AFF"));
-		ScreenUtils.clear(Color.WHITE);
+		ScreenUtils.clear(Color.valueOf("#f0eef0"));
+//		ScreenUtils.clear(Color.WHITE);
 //		batch.setProjectionMatrix(camera.combined);
 		// tell the camera to update its matrices.
 		camera.update();

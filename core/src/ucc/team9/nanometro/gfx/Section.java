@@ -50,9 +50,10 @@ public class Section {
         int k = this.sampleList.size();
         for (int i = 0; i < k - 1; i++) {
             shape.setProjectionMatrix(camera.combined);
-            shape.begin(ShapeRenderer.ShapeType.Line);
-            shape.setColor(Color.BLUE);
-            shape.line(sampleList.get(i) , sampleList.get(i + 1));
+            shape.begin(ShapeRenderer.ShapeType.Filled);
+            shape.setColor(Color.valueOf(this.line.colour));
+            shape.rectLine(sampleList.get(i) , sampleList.get(i + 1), 0.6f);
+//            shape.line(sampleList.get(i) , sampleList.get(i + 1));
             shape.end();
         }
     }

@@ -14,6 +14,8 @@ public class Line {
     public final List<Section> sectionList;
     private static final World world = Main.world;
 
+    public String colour;
+
 
     public List<Location> getLocationList() {
         List<Location> l = new ArrayList<>();
@@ -30,6 +32,7 @@ public class Line {
         this.stationList.add(new Station(this, a));
         this.stationList.add(new Station(this, b));
         this.sectionList.add(new Section(this, this.stationList.get(0), this.stationList.get(1)));
+        this.colour = "#fcce05";
     }
 
     public Section getNextSection(Section s) {
@@ -60,7 +63,7 @@ public class Line {
 //        Gdx.gl.glEnable(GL20.GL_BLEND);
 //        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 //        Gdx.gl.glLineWidth(25);
-        if (stationList.size() < 2) return;
+//        if (stationList.size() < 2) return;
         for (Section s : this.sectionList) {
                 s.draw(shape);
         }
